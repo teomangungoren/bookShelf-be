@@ -4,7 +4,7 @@ data class UpdateBookRequest(
     val id:String,
     val title:String?,
     val author:String?,
-    val bookYear:String?,
+    val bookYear:Int?,
     val pressYear:Int?,
     val isbn:String,
     val totalPageNumber:Int?,
