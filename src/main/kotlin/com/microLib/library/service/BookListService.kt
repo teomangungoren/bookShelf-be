@@ -3,7 +3,9 @@ package com.microLib.library.service
 import com.microLib.library.domain.dto.BookResponse
 import com.microLib.library.exception.BookNotFoundException
 import com.microLib.library.repository.BookRepository
+import org.springframework.stereotype.Service
 
+@Service
 class BookListService(
     private val bookRepository: BookRepository,
     private val categoryService: CategoryService
