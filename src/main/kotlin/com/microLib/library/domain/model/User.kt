@@ -15,20 +15,20 @@ import java.time.LocalDateTime
 @Entity
 data class User(
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name="UUID",strategy = "org.hibernate.id.UUIDGenerator")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Id
-    val id:String?=null,
-    val name:String,
-    val surname:String,
-    var email:String,
-    var phoneNumber:String,
-    private var password:String,
+    val id: String? = null,
+    val name: String,
+    val surname: String,
+    var email: String,
+    var phoneNumber: String,
+    private var password: String,
     @Enumerated(EnumType.STRING)
-    var role:Role=Role.USER,
-    val birthDate:String,
+    var role: Role = Role.USER,
+    val birthDate: String,
     @CreationTimestamp
-    val creationTime:LocalDateTime= LocalDateTime.now(),
-):UserDetails{
+    val creationTime: LocalDateTime = LocalDateTime.now()
+) : UserDetails {
     override fun getAuthorities(): MutableCollection<out SimpleGrantedAuthority> {
         return mutableListOf(SimpleGrantedAuthority(role.name))
     }
@@ -42,18 +42,18 @@ data class User(
     }
 
     override fun isAccountNonExpired(): Boolean {
-        return true;
+        return true
     }
 
     override fun isAccountNonLocked(): Boolean {
-        return true;
+        return true
     }
 
     override fun isCredentialsNonExpired(): Boolean {
-        return true;
+        return true
     }
 
     override fun isEnabled(): Boolean {
-        return true;
+        return true
     }
 }

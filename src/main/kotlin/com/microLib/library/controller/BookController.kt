@@ -19,35 +19,35 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/books")
-class BookController(private val bookListService: BookListService,
-                     private val bookSaveService: BookSaveService,
-                     private val bookUpdateService: BookUpdateService) {
-     private val logger=LoggerFactory.getLogger(BookController::class.java)
+class BookController(
+    private val bookListService: BookListService,
+    private val bookSaveService: BookSaveService,
+    private val bookUpdateService: BookUpdateService
+) {
+    private val logger = LoggerFactory.getLogger(BookController::class.java)
 
     @PostMapping
-    fun saveBook(@RequestBody createBookRequest:CreateBookRequest):ResponseEntity<BookResponse>{
+    fun saveBook(@RequestBody createBookRequest: CreateBookRequest): ResponseEntity<BookResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookSaveService.createBook(createBookRequest))
     }
 
     @GetMapping
-    fun getBookList():ResponseEntity<List<BookResponse>>{
-        return ResponseEntity(bookListService.listBook(),HttpStatus.OK)
+    fun getBookList(): ResponseEntity<List<BookResponse>> {
+        return ResponseEntity(bookListService.listBook(), HttpStatus.OK)
     }
 
     @GetMapping("/book/isbn/{isbn}")
-    fun getBookByIsbn(@PathVariable isbn:String):ResponseEntity<BookResponse>{
-        return ResponseEntity(bookListService.findByIsbn(isbn),HttpStatus.OK)
+    fun getBookByIsbn(@PathVariable isbn: String): ResponseEntity<BookResponse> {
+        return ResponseEntity(bookListService.findByIsbn(isbn), HttpStatus.OK)
     }
 
     @GetMapping("/book/id/{id}")
-    fun getBookById(@PathVariable id:String):ResponseEntity<BookResponse>{
-        return ResponseEntity(bookListService.findById(id),HttpStatus.OK)
+    fun getBookById(@PathVariable id: String): ResponseEntity<BookResponse> {
+        return ResponseEntity(bookListService.findById(id), HttpStatus.OK)
     }
 
     @PutMapping("/update")
-    fun updateBook(@RequestBody updateBookRequest: UpdateBookRequest):ResponseEntity<BookResponse>{
-        return ResponseEntity(bookUpdateService.updateBook(updateBookRequest),HttpStatus.OK)
+    fun updateBook(@RequestBody updateBookRequest: UpdateBookRequest): ResponseEntity<BookResponse> {
+        return ResponseEntity(bookUpdateService.updateBook(updateBookRequest), HttpStatus.OK)
     }
-
-
 }

@@ -10,7 +10,7 @@ data class Category(
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Id
     val id: String? = null,
-    val name:String,
+    val name: String,
     @OneToMany(mappedBy = "category")
-    val books:List<Book>
+    val books: List<Book>
 )

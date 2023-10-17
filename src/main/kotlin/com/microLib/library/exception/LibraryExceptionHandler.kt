@@ -9,7 +9,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class LibraryExceptionHandler {
 
     @ExceptionHandler(BookNotFoundException::class)
-    fun handleBookNotFoundException(exception:BookNotFoundException):ResponseEntity<*>{
-        return ResponseEntity(exception.message,HttpStatus.NOT_FOUND)
+    fun handleBookNotFoundException(exception: BookNotFoundException): ResponseEntity<*> {
+        return ResponseEntity(exception.message, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(UsernameNotFoundException::class)
+    fun handleUserNotFoundException(exception: UsernameNotFoundException): ResponseEntity<*> {
+        return ResponseEntity(exception.message, HttpStatus.NOT_FOUND)
     }
 }

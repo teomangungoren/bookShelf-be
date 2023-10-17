@@ -4,10 +4,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class General {
-    companion object{
+    companion object {
         @JvmStatic
-        fun <T> getOrDefaultValue(data:T?,defaultValue:T):T{
-            return data?:defaultValue
+        fun <T> getOrDefaultValue(data: T?, defaultValue: T): T {
+            return data ?: defaultValue
         }
     }
 }

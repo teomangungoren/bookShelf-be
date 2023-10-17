@@ -10,13 +10,15 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
-class BookUpdateService(private val bookRepository: BookRepository,
-    private val general:General) {
+class BookUpdateService(
+    private val bookRepository: BookRepository,
+    private val general: General
+) {
 
     @Transactional(rollbackOn = [Exception::class])
-    fun updateBook(updateBookRequest:UpdateBookRequest):BookResponse{
-        val book=bookRepository.findBookById(updateBookRequest.id)?:throw BookNotFoundException("Book not found with ${updateBookRequest.id}")
-        updateAttributes(updateBookRequest,book)
+    fun updateBook(updateBookRequest: UpdateBookRequest): BookResponse {
+        val book = bookRepository.findBookById(updateBookRequest.id) ?: throw BookNotFoundException("Book not found with ${updateBookRequest.id}")
+        updateAttributes(updateBookRequest, book)
         return BookResponse.convert(bookRepository.save(book))
     }
 
@@ -30,5 +32,4 @@ class BookUpdateService(private val bookRepository: BookRepository,
             book.count = count ?: book.count
         }
     }
-
 }

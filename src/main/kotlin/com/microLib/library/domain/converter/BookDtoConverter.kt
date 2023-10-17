@@ -6,17 +6,17 @@ import com.microLib.library.domain.model.Category
 
 class BookDtoConverter {
 
-    companion object{
+    companion object {
         @JvmStatic
-        fun convertToBookDto(createBookRequest: CreateBookRequest,category: Category):Book{
-            return with(createBookRequest){
+        fun convertToBookDto(createBookRequest: CreateBookRequest, category: Category): Book {
+            return with(createBookRequest) {
                 Book(
-                    title=title,
-                    author=author,
-                    bookYear=bookYear,
-                    pressYear=pressYear,
-                    isbn=isbn,
-                    totalPageNumber=totalPageNumber,
+                    title = title,
+                    author = author,
+                    bookYear = bookYear,
+                    pressYear = pressYear,
+                    isbn = isbn,
+                    totalPageNumber = totalPageNumber,
                     category = category
                 )
             }

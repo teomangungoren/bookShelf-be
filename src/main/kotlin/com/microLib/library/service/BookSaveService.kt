@@ -8,21 +8,22 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
-class BookSaveService(private val bookRepository:BookRepository,
-    private val categoryService: CategoryService)   {
+class BookSaveService(
+    private val bookRepository: BookRepository,
+    private val categoryService: CategoryService
+) {
 
     @Transactional
-    fun createBook(createBookRequest: CreateBookRequest):BookResponse{
-        val category=categoryService.findById(createBookRequest.categoryId)
-        val book=BookDtoConverter.convertToBookDto(createBookRequest,category!!)
-        if(bookRepository.findBookByIsbn(createBookRequest.isbn)!=null){
-            book.count+=1
+    fun createBook(createBookRequest: CreateBookRequest): BookResponse {
+        val category = categoryService.findById(createBookRequest.categoryId)
+        val book = BookDtoConverter.convertToBookDto(createBookRequest, category!!)
+        if (bookRepository.findBookByIsbn(createBookRequest.isbn) != null) {
+            book.count += 1
         }
         return BookResponse.convert(bookRepository.save(book))
     }
 
-    fun deleteBook(id:String){
+    fun deleteBook(id: String) {
         bookRepository.deleteById(id)
     }
-
 }

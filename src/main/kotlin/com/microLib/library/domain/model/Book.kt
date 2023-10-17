@@ -11,14 +11,14 @@ data class Book(
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Id
     val id: String? = null,
-    var title:String,
-    var author:String,
-    var bookYear:Int,
-    var pressYear:Int,
-    val isbn:String,
-    var totalPageNumber:Int,
-    var count:Int=1,
+    var title: String,
+    var author: String,
+    var bookYear: Int,
+    var pressYear: Int,
+    val isbn: String,
+    var totalPageNumber: Int,
+    var count: Int = 1,
     @ManyToOne
     @JoinColumn(name = "category_id")
-    var category: Category,
+    var category: Category
 )

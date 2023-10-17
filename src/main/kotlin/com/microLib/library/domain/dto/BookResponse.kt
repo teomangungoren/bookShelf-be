@@ -3,18 +3,18 @@ package com.microLib.library.domain.dto
 import com.microLib.library.domain.model.Book
 
 data class BookResponse(
-    val title:String,
-    val author:String,
-    val bookYear:Int,
-    val pressYear:Int,
-    val isbn:String,
-    val totalPageNumber:Int,
-    val count:Int,
-    val categoryName:String,
-){
-    companion object{
+    val title: String,
+    val author: String,
+    val bookYear: Int,
+    val pressYear: Int,
+    val isbn: String,
+    val totalPageNumber: Int,
+    val count: Int,
+    val categoryName: String
+) {
+    companion object {
         @JvmStatic
-        fun convert(from:Book):BookResponse{
+        fun convert(from: Book): BookResponse {
             return BookResponse(
                 title = from.title,
                 author = from.author,
