@@ -1,6 +1,7 @@
 package com.microLib.library.domain.model
 
 import com.microLib.library.domain.enum.Role
+import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
@@ -11,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDateTime
 
+@Entity
 data class User(
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name="UUID",strategy = "org.hibernate.id.UUIDGenerator")
@@ -22,7 +24,7 @@ data class User(
     var phoneNumber:String,
     private var password:String,
     @Enumerated(EnumType.STRING)
-    var role:Role,
+    var role:Role=Role.USER,
     val birthDate:String,
     @CreationTimestamp
     val creationTime:LocalDateTime= LocalDateTime.now(),
