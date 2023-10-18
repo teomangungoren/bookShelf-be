@@ -13,8 +13,13 @@ class LibraryExceptionHandler {
         return ResponseEntity(exception.message, HttpStatus.NOT_FOUND)
     }
 
-    @ExceptionHandler(UsernameNotFoundException::class)
-    fun handleUserNotFoundException(exception: UsernameNotFoundException): ResponseEntity<*> {
+    @ExceptionHandler(UserNotFoundException::class)
+    fun handleUserNotFoundException(exception: UserNotFoundException): ResponseEntity<*> {
         return ResponseEntity(exception.message, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(UserAlreadyExistException::class)
+    fun handleUserAlreadyExistException(exception: UserAlreadyExistException): ResponseEntity<*> {
+        return ResponseEntity(exception.message, HttpStatus.CONFLICT)
     }
 }
