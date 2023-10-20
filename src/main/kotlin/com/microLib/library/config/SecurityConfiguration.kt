@@ -25,7 +25,8 @@ class SecurityConfiguration(
             .authorizeHttpRequests {
                     requests ->
                 requests
-                    .requestMatchers(RequestMatcher { true })
+                    .requestMatchers(RequestMatcher { request ->
+                        request.servletPath == "/api/v1/users/**"})
                     .permitAll()
                     .anyRequest()
                     .authenticated()

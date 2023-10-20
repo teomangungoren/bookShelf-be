@@ -6,6 +6,7 @@ import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.GenericGenerator
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -27,7 +28,9 @@ data class User(
     var role: Role = Role.USER,
     val birthDate: String,
     @CreationTimestamp
-    val creationTime: LocalDateTime = LocalDateTime.now()
+    val creationTime: LocalDateTime = LocalDateTime.now(),
+    @OneToMany(mappedBy = "user")
+    val tokens: List<Token> = emptyList()
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out SimpleGrantedAuthority> {
         return mutableListOf(SimpleGrantedAuthority(role.name))
