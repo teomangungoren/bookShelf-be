@@ -12,7 +12,8 @@ data class Token(
     val id: String? = null,
     val token: String,
     val tokenType: TokenType? = TokenType.BEARER,
-    val expired: Boolean,
+    var expired: Boolean,
+    var revoked: Boolean,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
