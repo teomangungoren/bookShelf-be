@@ -1,5 +1,6 @@
 package com.microLib.library.config
 
+import com.microLib.library.service.LogoutService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationProvider
@@ -17,14 +18,15 @@ import org.springframework.security.web.util.matcher.RequestMatcher
 @EnableWebSecurity
 class SecurityConfiguration(
     private val authenticationProvider: AuthenticationProvider,
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    private val logoutService: LogoutService
 ) {
 
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
 
-        val clearSideData:HeaderWriterLogoutHandler= HeaderWriterLogoutHandler(ClearSiteDataHeaderWriter())
+       // val clearSideData:HeaderWriterLogoutHandler= HeaderWriterLogoutHandler(ClearSiteDataHeaderWriter())
 
         return http
             .cors { it.disable() }
@@ -47,7 +49,7 @@ class SecurityConfiguration(
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .logout {logout->
                 logout.logoutUrl("/api/v1/users/logout")
-                logout.addLogoutHandler(clearSideData)
+                logout.addLogoutHandler(logoutService)
                     .logoutSuccessHandler { request, response, authentication -> SecurityContextHolder.clearContext() }
             }
             .build()
