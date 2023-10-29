@@ -7,7 +7,6 @@ data class UserResponse(
     val surname: String,
     val email: String,
     val phoneNumber: String,
-    val birthDate: String,
     val creationTime: String
 ) {
     companion object {
@@ -18,7 +17,6 @@ data class UserResponse(
                     surname = surname,
                     email = email,
                     phoneNumber = phoneNumber,
-                    birthDate = birthDate,
                     creationTime = creationTime.toString()
                 )
             }

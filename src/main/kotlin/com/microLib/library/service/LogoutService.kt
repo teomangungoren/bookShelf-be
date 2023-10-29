@@ -15,11 +15,10 @@ class LogoutService(private val tokenRepository: TokenRepository): LogoutHandler
     override fun logout(request: HttpServletRequest?, response: HttpServletResponse?, authentication: Authentication?) {
 
         val authHeader = request?.getHeader("Authorization")
-        val jwt: String
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return
         }
-        jwt = authHeader.substring(7)
+        val jwt: String = authHeader.substring(7)
         val token = tokenRepository.findByToken(jwt)
 
         token?.let{

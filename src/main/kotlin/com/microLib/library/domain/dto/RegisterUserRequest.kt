@@ -9,17 +9,15 @@ data class RegisterUserRequest(
     val email: String,
     val phoneNumber: String,
     val password: String,
-    val birthDate: String,
-    private val passwordEncoder: PasswordEncoder) {
+    ) {
     companion object {
-        fun toUser(registerUserRequest: RegisterUserRequest): User {
+        fun toUser(registerUserRequest: RegisterUserRequest,passwordEncoder: PasswordEncoder): User {
             return User(
                 name = registerUserRequest.name,
                 surname = registerUserRequest.surname,
                 email = registerUserRequest.email,
                 phoneNumber = registerUserRequest.phoneNumber,
-                password = registerUserRequest.passwordEncoder.encode(registerUserRequest.password),
-                birthDate = registerUserRequest.birthDate
+                password = passwordEncoder.encode(registerUserRequest.password)
             )
         }
     }

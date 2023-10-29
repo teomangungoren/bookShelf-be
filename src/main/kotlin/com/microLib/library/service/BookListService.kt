@@ -3,6 +3,7 @@ package com.microLib.library.service
 import com.microLib.library.domain.dto.BookResponse
 import com.microLib.library.exception.BookNotFoundException
 import com.microLib.library.repository.BookRepository
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 
 @Service
@@ -11,6 +12,8 @@ class BookListService(
     private val categoryService: CategoryService
 ) {
 
+
+    @PreAuthorize("hasRole('USER')")
     fun listBook(): List<BookResponse> {
         return bookRepository
             .findAll()

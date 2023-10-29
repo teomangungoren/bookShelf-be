@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.GenericGenerator
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDateTime
 
 @Entity
+@Table(name = "users")
 data class User(
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -26,7 +28,6 @@ data class User(
     private var password: String,
     @Enumerated(EnumType.STRING)
     var role: Role = Role.USER,
-    val birthDate: String,
     @CreationTimestamp
     val creationTime: LocalDateTime = LocalDateTime.now(),
     @OneToMany(mappedBy = "user")

@@ -5,6 +5,7 @@ import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
 
 @Entity
+@Table(name = "tokens")
 data class Token(
     @Id
     @GeneratedValue(generator = "UUID")

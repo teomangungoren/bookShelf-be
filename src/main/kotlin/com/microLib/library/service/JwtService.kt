@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.security.Key
@@ -14,8 +13,6 @@ import java.util.Date
 @Service
 class JwtService {
 
-    @Value("\${jwt.secret}")
-    private val SECRET_KEY: String = ""
     fun extractUsername(token: String): String {
         return extractClaim(token, Claims::getSubject)
     }
@@ -25,18 +22,18 @@ class JwtService {
             .builder()
             .setSubject(userDetails.username)
             .setIssuedAt(Date(System.currentTimeMillis()))
-            .setExpiration(Date(System.currentTimeMillis() + 1000 * 60 * 24))
+            .setExpiration(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact()
     }
 
     fun generateToken(userDetails: UserDetails): String {
-        return generateToken(HashMap(), userDetails)
+        return generateToken(emptyMap(), userDetails)
     }
 
     fun isValidToken(token: String, userDetails: UserDetails): Boolean {
         val username = extractUsername(token)
-        return (username.equals(userDetails.username) && !isTokenExpired(token))
+        return username == userDetails.username && !isTokenExpired(token)
     }
 
     private fun isTokenExpired(token: String): Boolean {
@@ -63,5 +60,9 @@ class JwtService {
     fun getSignInKey(): Key {
         val keyBytes = Base64.getDecoder().decode(SECRET_KEY)
         return Keys.hmacShaKeyFor(keyBytes)
+    }
+
+    companion object {
+        private const val SECRET_KEY: String = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
     }
 }

@@ -10,9 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler
-import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter
-import org.springframework.security.web.util.matcher.RequestMatcher
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @Configuration
 @EnableWebSecurity
@@ -27,15 +25,13 @@ class SecurityConfiguration(
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
 
        // val clearSideData:HeaderWriterLogoutHandler= HeaderWriterLogoutHandler(ClearSiteDataHeaderWriter())
-
         return http
             .cors { it.disable() }
             .csrf { it.disable() }
             .authorizeHttpRequests {
                     requests ->
                 requests
-                    .requestMatchers(RequestMatcher { request ->
-                        request.servletPath == "/api/v1/users/**"})
+                    .requestMatchers(AntPathRequestMatcher("/api/v1/users/**"))
                     .permitAll()
                     .anyRequest()
                     .authenticated()

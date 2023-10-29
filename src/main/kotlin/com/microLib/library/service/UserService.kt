@@ -11,30 +11,27 @@ import com.microLib.library.exception.UserAlreadyExistException
 import com.microLib.library.exception.UserNotFoundException
 import com.microLib.library.repository.TokenRepository
 import com.microLib.library.repository.UserRepository
-import jakarta.transaction.Transactional
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class UserService(private val userRepository: UserRepository,
                   private val jwtService: JwtService,
                   private val tokenRepository: TokenRepository,
-                  private val authenticationManager: AuthenticationManager) {
+                  private val authenticationManager: AuthenticationManager,private val passwordEncoder: PasswordEncoder) {
 
-    @Transactional
+
     fun registerUser(registerUserRequest: RegisterUserRequest):AuthenticationResponse{
-        if (existByEmail(registerUserRequest.email)) {
-            throw UserAlreadyExistException("User with email ${registerUserRequest.email} already exist")
+        if (userRepository.existsByEmail(registerUserRequest.email)) {
+                throw UserAlreadyExistException("User with email ${registerUserRequest.email} already exist")
         }
-        val user=userRepository.save(RegisterUserRequest.toUser(registerUserRequest))
+        val user=userRepository.save(RegisterUserRequest.toUser(registerUserRequest,passwordEncoder ))
        val jwtToken=jwtService.generateToken(user)
         createToken(jwtToken, user)
         return AuthenticationResponse(jwtToken)
-
     }
-
-
 
     fun authenticate(signInRequest: SignInRequest):AuthenticationResponse{
         authenticationManager.authenticate(
@@ -64,7 +61,7 @@ class UserService(private val userRepository: UserRepository,
     }
 
     private fun revokeAllUserTokens(user:User){
-        var validToken=tokenRepository.findAllValidTokensByUser(user.id!!)
+        val validToken=tokenRepository.findAllValidTokensByUser(user.id!!)
         if(validToken.isEmpty()){
             return
         }
@@ -74,12 +71,6 @@ class UserService(private val userRepository: UserRepository,
         }
         tokenRepository.saveAll(validToken)
     }
-
-    @Transactional
-    fun existByEmail(email: String): Boolean {
-        return userRepository.existByEmail(email)
-    }
-
     fun getById(id: String): UserResponse? {
         val user = userRepository.findUserById(id)
         return user?.let { UserResponse.convert(it) } ?: throw UserNotFoundException("User with id $id not found")
