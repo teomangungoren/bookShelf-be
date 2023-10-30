@@ -16,7 +16,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "users")
-data class User(
+ data class User(
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Id
@@ -25,7 +25,7 @@ data class User(
     val surname: String,
     var email: String,
     var phoneNumber: String,
-    private var password: String,
+     var password: String,
     @Enumerated(EnumType.STRING)
     var role: Role = Role.USER,
     @CreationTimestamp
@@ -37,7 +37,7 @@ data class User(
         return mutableListOf(SimpleGrantedAuthority(role.name))
     }
 
-    override fun getPassword(): String {
+    override  fun getPassword(): String {
         return password
     }
 

@@ -1,9 +1,6 @@
 package com.microLib.library.service
 
-import com.microLib.library.domain.dto.AuthenticationResponse
-import com.microLib.library.domain.dto.RegisterUserRequest
-import com.microLib.library.domain.dto.SignInRequest
-import com.microLib.library.domain.dto.UserResponse
+import com.microLib.library.domain.dto.*
 import com.microLib.library.domain.enum.TokenType
 import com.microLib.library.domain.model.Token
 import com.microLib.library.domain.model.User
@@ -15,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.security.Principal
 
 @Service
 class UserService(private val userRepository: UserRepository,
@@ -24,13 +22,26 @@ class UserService(private val userRepository: UserRepository,
 
 
     fun registerUser(registerUserRequest: RegisterUserRequest):AuthenticationResponse{
-        if (userRepository.existsByEmail(registerUserRequest.email)) {
+        if (userRepository.existsByEmail(registerUserRequest.email) || userRepository.existsByPhoneNumber(registerUserRequest.phoneNumber)) {
                 throw UserAlreadyExistException("User with email ${registerUserRequest.email} already exist")
         }
         val user=userRepository.save(RegisterUserRequest.toUser(registerUserRequest,passwordEncoder ))
        val jwtToken=jwtService.generateToken(user)
         createToken(jwtToken, user)
         return AuthenticationResponse(jwtToken)
+    }
+
+    fun changePassword(request: ChangePasswordRequest,principal: Principal){
+        val user=(principal as UsernamePasswordAuthenticationToken).principal as User
+
+        if(!passwordEncoder.matches(request.oldPassword,user.password)){
+            throw IllegalArgumentException("Old password is not correct")
+        }
+        if(!request.newPassword.equals(request.confirmPassword)){
+            throw IllegalArgumentException("New password and confirm password does not match")
+        }
+        user.password=passwordEncoder.encode(request.newPassword)
+        userRepository.save(user)
     }
 
     fun authenticate(signInRequest: SignInRequest):AuthenticationResponse{
@@ -75,4 +86,7 @@ class UserService(private val userRepository: UserRepository,
         val user = userRepository.findUserById(id)
         return user?.let { UserResponse.convert(it) } ?: throw UserNotFoundException("User with id $id not found")
     }
+
+
+
 }
