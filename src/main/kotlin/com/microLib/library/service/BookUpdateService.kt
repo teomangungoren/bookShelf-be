@@ -1,7 +1,7 @@
 package com.microLib.library.service
 
-import com.microLib.library.domain.dto.BookResponse
-import com.microLib.library.domain.dto.UpdateBookRequest
+import com.microLib.library.domain.response.BookResponse
+import com.microLib.library.domain.request.UpdateBookRequest
 import com.microLib.library.domain.model.Book
 import com.microLib.library.exception.BookNotFoundException
 import com.microLib.library.extension.General

@@ -1,6 +1,7 @@
 package com.microLib.library.service
 
-import com.microLib.library.domain.dto.BookResponse
+import com.microLib.library.domain.model.Book
+import com.microLib.library.domain.response.BookResponse
 import com.microLib.library.exception.BookNotFoundException
 import com.microLib.library.repository.BookRepository
 import org.springframework.security.access.prepost.PreAuthorize
@@ -26,8 +27,8 @@ class BookListService(
         return BookResponse.convert(book)
     }
 
-    fun findById(id: String): BookResponse {
-        val book = bookRepository.findBookById(id) ?: throw BookNotFoundException("Book not found with $id")
-        return BookResponse.convert(book)
+    fun findById(id: String): Book {
+        return bookRepository.findBookById(id) ?: throw BookNotFoundException("Book not found with $id")
     }
+
 }

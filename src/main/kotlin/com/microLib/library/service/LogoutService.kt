@@ -19,13 +19,13 @@ class LogoutService(private val tokenRepository: TokenRepository): LogoutHandler
             return
         }
         val jwt: String = authHeader.substring(7)
-        val token = tokenRepository.findByToken(jwt)
-
-        token?.let{
-            it.expired = true
-            it.revoked = true
+        tokenRepository.findByToken(jwt)?.apply {
+         expired=true
+         revoked=true
+        }?.also {
             tokenRepository.save(it)
         }
-        return  SecurityContextHolder.clearContext()
         }
-    }
+
+        }
+

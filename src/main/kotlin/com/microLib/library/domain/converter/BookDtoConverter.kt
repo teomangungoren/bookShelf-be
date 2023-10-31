@@ -1,6 +1,6 @@
 package com.microLib.library.domain.converter
 
-import com.microLib.library.domain.dto.CreateBookRequest
+import com.microLib.library.domain.request.CreateBookRequest
 import com.microLib.library.domain.model.Book
 import com.microLib.library.domain.model.Category
 

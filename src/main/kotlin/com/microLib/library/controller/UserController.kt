@@ -1,9 +1,9 @@
 package com.microLib.library.controller
 
-import com.microLib.library.domain.dto.AuthenticationResponse
-import com.microLib.library.domain.dto.ChangePasswordRequest
-import com.microLib.library.domain.dto.RegisterUserRequest
-import com.microLib.library.domain.dto.SignInRequest
+import com.microLib.library.domain.response.AuthenticationResponse
+import com.microLib.library.domain.request.ChangePasswordRequest
+import com.microLib.library.domain.request.RegisterUserRequest
+import com.microLib.library.domain.request.SignInRequest
 import com.microLib.library.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -28,7 +28,7 @@ class UserController(private val userService: UserService) {
     }
 
     @PostMapping("/password")
-    fun changePassword(@RequestBody changePasswordRequest: ChangePasswordRequest,principal: Principal):ResponseEntity<*>{
+    fun changePassword(@RequestBody changePasswordRequest: ChangePasswordRequest, principal: Principal):ResponseEntity<*>{
         return ResponseEntity(userService.changePassword(changePasswordRequest,principal),HttpStatus.OK)
     }
 

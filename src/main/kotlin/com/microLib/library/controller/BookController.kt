@@ -1,8 +1,8 @@
 package com.microLib.library.controller
 
-import com.microLib.library.domain.dto.BookResponse
-import com.microLib.library.domain.dto.CreateBookRequest
-import com.microLib.library.domain.dto.UpdateBookRequest
+import com.microLib.library.domain.response.BookResponse
+import com.microLib.library.domain.request.CreateBookRequest
+import com.microLib.library.domain.request.UpdateBookRequest
 import com.microLib.library.service.BookListService
 import com.microLib.library.service.BookSaveService
 import com.microLib.library.service.BookUpdateService

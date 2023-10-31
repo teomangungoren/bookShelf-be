@@ -1,9 +1,13 @@
 package com.microLib.library.service
 
-import com.microLib.library.domain.dto.*
 import com.microLib.library.domain.enum.TokenType
 import com.microLib.library.domain.model.Token
 import com.microLib.library.domain.model.User
+import com.microLib.library.domain.request.ChangePasswordRequest
+import com.microLib.library.domain.request.RegisterUserRequest
+import com.microLib.library.domain.request.SignInRequest
+import com.microLib.library.domain.response.AuthenticationResponse
+import com.microLib.library.domain.response.UserResponse
 import com.microLib.library.exception.UserAlreadyExistException
 import com.microLib.library.exception.UserNotFoundException
 import com.microLib.library.repository.TokenRepository
@@ -18,10 +22,11 @@ import java.security.Principal
 class UserService(private val userRepository: UserRepository,
                   private val jwtService: JwtService,
                   private val tokenRepository: TokenRepository,
-                  private val authenticationManager: AuthenticationManager,private val passwordEncoder: PasswordEncoder) {
+                  private val authenticationManager: AuthenticationManager,
+                  private val passwordEncoder: PasswordEncoder) {
 
 
-    fun registerUser(registerUserRequest: RegisterUserRequest):AuthenticationResponse{
+    fun registerUser(registerUserRequest: RegisterUserRequest): AuthenticationResponse {
         if (userRepository.existsByEmail(registerUserRequest.email) || userRepository.existsByPhoneNumber(registerUserRequest.phoneNumber)) {
                 throw UserAlreadyExistException("User with email ${registerUserRequest.email} already exist")
         }
@@ -31,7 +36,7 @@ class UserService(private val userRepository: UserRepository,
         return AuthenticationResponse(jwtToken)
     }
 
-    fun changePassword(request: ChangePasswordRequest,principal: Principal){
+    fun changePassword(request: ChangePasswordRequest, principal: Principal){
         val user=(principal as UsernamePasswordAuthenticationToken).principal as User
 
         if(!passwordEncoder.matches(request.oldPassword,user.password)){
@@ -44,7 +49,7 @@ class UserService(private val userRepository: UserRepository,
         userRepository.save(user)
     }
 
-    fun authenticate(signInRequest: SignInRequest):AuthenticationResponse{
+    fun authenticate(signInRequest: SignInRequest): AuthenticationResponse {
         authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
                 signInRequest.email,
@@ -86,7 +91,5 @@ class UserService(private val userRepository: UserRepository,
         val user = userRepository.findUserById(id)
         return user?.let { UserResponse.convert(it) } ?: throw UserNotFoundException("User with id $id not found")
     }
-
-
 
 }

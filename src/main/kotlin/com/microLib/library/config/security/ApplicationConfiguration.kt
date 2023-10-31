@@ -1,4 +1,4 @@
-package com.microLib.library.config
+package com.microLib.library.config.security
 
 import com.microLib.library.repository.UserRepository
 import org.springframework.context.annotation.Bean

@@ -22,4 +22,10 @@ class LibraryExceptionHandler {
     fun handleUserAlreadyExistException(exception: UserAlreadyExistException): ResponseEntity<*> {
         return ResponseEntity(exception.message, HttpStatus.CONFLICT)
     }
+
+    @ExceptionHandler(BookAlreadyExistException::class)
+    fun handleBookAlreadyExistException(exception: BookAlreadyExistException): ResponseEntity<*> {
+        return ResponseEntity(exception.message, HttpStatus.CONFLICT)
+    }
+
 }

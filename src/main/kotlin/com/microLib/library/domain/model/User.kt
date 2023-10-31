@@ -25,12 +25,12 @@ import java.time.LocalDateTime
     val surname: String,
     var email: String,
     var phoneNumber: String,
-     var password: String,
+    var password: String,
     @Enumerated(EnumType.STRING)
     var role: Role = Role.USER,
     @CreationTimestamp
     val creationTime: LocalDateTime = LocalDateTime.now(),
-    @OneToMany(mappedBy = "user")
+     @OneToMany(mappedBy = "user")
     val tokens: List<Token> = emptyList()
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out SimpleGrantedAuthority> {

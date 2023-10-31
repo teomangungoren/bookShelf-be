@@ -1,4 +1,4 @@
-package com.microLib.library.domain.dto
+package com.microLib.library.domain.request
 
 import com.microLib.library.domain.model.User
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -11,7 +11,7 @@ data class RegisterUserRequest(
     val password: String,
     ) {
     companion object {
-        fun toUser(registerUserRequest: RegisterUserRequest,passwordEncoder: PasswordEncoder): User {
+        fun toUser(registerUserRequest: RegisterUserRequest, passwordEncoder: PasswordEncoder): User {
             return User(
                 name = registerUserRequest.name,
                 surname = registerUserRequest.surname,

@@ -1,4 +1,4 @@
-package com.microLib.library.domain.dto
+package com.microLib.library.domain.response
 
 import com.microLib.library.domain.model.User
 

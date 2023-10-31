@@ -1,4 +1,4 @@
-package com.microLib.library.domain.dto
+package com.microLib.library.domain.request
 
 data class CreateBookRequest(
     val title: String,

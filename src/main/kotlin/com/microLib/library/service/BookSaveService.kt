@@ -1,8 +1,8 @@
 package com.microLib.library.service
 
 import com.microLib.library.domain.converter.BookDtoConverter
-import com.microLib.library.domain.dto.BookResponse
-import com.microLib.library.domain.dto.CreateBookRequest
+import com.microLib.library.domain.response.BookResponse
+import com.microLib.library.domain.request.CreateBookRequest
 import com.microLib.library.repository.BookRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
