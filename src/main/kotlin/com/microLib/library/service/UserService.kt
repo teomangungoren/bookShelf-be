@@ -26,11 +26,11 @@ class UserService(private val userRepository: UserRepository,
                   private val passwordEncoder: PasswordEncoder) {
 
 
-    fun registerUser(registerUserRequest: RegisterUserRequest): AuthenticationResponse {
-        if (userRepository.existsByEmail(registerUserRequest.email) || userRepository.existsByPhoneNumber(registerUserRequest.phoneNumber)) {
-                throw UserAlreadyExistException("User with email ${registerUserRequest.email} already exist")
+    fun registerUser(request: RegisterUserRequest): AuthenticationResponse {
+        if (userRepository.existsByEmail(request.email) || userRepository.existsByPhoneNumber(request.phoneNumber)) {
+                throw UserAlreadyExistException("User with email ${request.email} already exist")
         }
-        val user=userRepository.save(RegisterUserRequest.toUser(registerUserRequest,passwordEncoder ))
+        val user=userRepository.save(RegisterUserRequest.toUser(request,passwordEncoder ))
        val jwtToken=jwtService.generateToken(user)
         createToken(jwtToken, user)
         return AuthenticationResponse(jwtToken)
@@ -49,15 +49,15 @@ class UserService(private val userRepository: UserRepository,
         userRepository.save(user)
     }
 
-    fun authenticate(signInRequest: SignInRequest): AuthenticationResponse {
+    fun authenticate(request: SignInRequest): AuthenticationResponse {
         authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
-                signInRequest.email,
-                signInRequest.password
+                request.email,
+                request.password
             )
         )
-        val user= userRepository.findByEmail(signInRequest.email)?:
-        throw UserNotFoundException("User with email ${signInRequest.email} not found")
+        val user= userRepository.findByEmail(request.email)?:
+        throw UserNotFoundException("User with email ${request.email} not found")
        val jwtToken= jwtService.generateToken(user)
         revokeAllUserTokens(user)
         createToken(jwtToken, user)

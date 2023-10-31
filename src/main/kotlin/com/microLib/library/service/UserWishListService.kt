@@ -4,6 +4,7 @@ import com.microLib.library.domain.request.CreateUserWishListRequest
 import com.microLib.library.domain.model.UserWishList
 import com.microLib.library.domain.response.UserWishListResponse
 import com.microLib.library.exception.BookAlreadyExistException
+import com.microLib.library.exception.BookNotFoundException
 import com.microLib.library.repository.UserWishListRepository
 import org.springframework.stereotype.Service
 
@@ -18,6 +19,13 @@ class UserWishListService(private val userWishListRepository: UserWishListReposi
             bookId = book.id!!,
             userId = request.userId))
         return UserWishListResponse.convert(userWishList)
+    }
+
+    fun delete(userWishListId:String,userId:String){
+        val userWishList=userWishListRepository.findBookByUserIdAndBookId(userId,userWishListId)?.let {
+         userWishListRepository.delete(it)
+        }?:throw BookNotFoundException("Book not found in user's wish list")
+
     }
 
 
