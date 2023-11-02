@@ -31,7 +31,7 @@ class JwtAuthenticationFilter(
         }
         val jwt = authHeader.substring(7)
         val userEmail = jwtService.extractUsername(jwt)
-        if (userEmail != null && SecurityContextHolder.getContext().authentication != null) {
+        if (userEmail != null && SecurityContextHolder.getContext().authentication == null) {
             val userDetails = userDetailsService.loadUserByUsername(userEmail)
             val isValidToken=tokenRepository.findByToken(jwt)?.let {
                 token->!token.revoked && !token.expired

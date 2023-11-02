@@ -14,9 +14,9 @@ import com.microLib.library.repository.TokenRepository
 import com.microLib.library.repository.UserRepository
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.security.Principal
 
 @Service
 class UserService(private val userRepository: UserRepository,
@@ -28,7 +28,7 @@ class UserService(private val userRepository: UserRepository,
 
     fun registerUser(request: RegisterUserRequest): AuthenticationResponse {
         if (userRepository.existsByEmail(request.email) || userRepository.existsByPhoneNumber(request.phoneNumber)) {
-                throw UserAlreadyExistException("User with email ${request.email} already exist")
+                throw UserAlreadyExistException("User already exist")
         }
         val user=userRepository.save(RegisterUserRequest.toUser(request,passwordEncoder ))
        val jwtToken=jwtService.generateToken(user)
@@ -36,17 +36,17 @@ class UserService(private val userRepository: UserRepository,
         return AuthenticationResponse(jwtToken)
     }
 
-    fun changePassword(request: ChangePasswordRequest, principal: Principal){
-        val user=(principal as UsernamePasswordAuthenticationToken).principal as User
+    fun changePassword(request: ChangePasswordRequest){
+        val user=userRepository.findByEmail(SecurityContextHolder.getContext().authentication.name)?:throw UserNotFoundException("User not found")
 
-        if(!passwordEncoder.matches(request.oldPassword,user.password)){
-            throw IllegalArgumentException("Old password is not correct")
-        }
-        if(!request.newPassword.equals(request.confirmPassword)){
-            throw IllegalArgumentException("New password and confirm password does not match")
-        }
-        user.password=passwordEncoder.encode(request.newPassword)
-        userRepository.save(user)
+           if(!passwordEncoder.matches(request.oldPassword,user.password)){
+               throw IllegalArgumentException("Old password is not correct")
+           }
+           if(!request.newPassword.equals(request.confirmPassword)){
+               throw IllegalArgumentException("New password and confirm password does not match")
+           }
+           user.password=passwordEncoder.encode(request.newPassword)
+           userRepository.save(user)
     }
 
     fun authenticate(request: SignInRequest): AuthenticationResponse {

@@ -25,6 +25,7 @@ import java.time.LocalDateTime
     val surname: String,
     var email: String,
     var phoneNumber: String,
+    @get:JvmName("password2")
     var password: String,
     @Enumerated(EnumType.STRING)
     var role: Role = Role.USER,
@@ -60,4 +61,6 @@ import java.time.LocalDateTime
     override fun isEnabled(): Boolean {
         return true
     }
+
+
 }

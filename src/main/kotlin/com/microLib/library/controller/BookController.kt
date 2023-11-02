@@ -29,14 +29,14 @@ class BookController(
     private val logger = LoggerFactory.getLogger(BookController::class.java)
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('USER')")
     fun saveBook(@RequestBody createBookRequest: CreateBookRequest): ResponseEntity<BookResponse> {
         logger.info("BookController.saveBook() called with: createBookRequest = [$createBookRequest]")
         return ResponseEntity.status(HttpStatus.CREATED).body(bookSaveService.createBook(createBookRequest))
     }
 
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     fun getBookList(): ResponseEntity<List<BookResponse>> {
         return ResponseEntity(bookListService.listBook(), HttpStatus.OK)
@@ -46,14 +46,5 @@ class BookController(
     fun getBookByIsbn(@PathVariable isbn: String): ResponseEntity<BookResponse> {
         return ResponseEntity(bookListService.findByIsbn(isbn), HttpStatus.OK)
     }
-
-    @GetMapping("/book/id/{id}")
-    fun getBookById(@PathVariable id: String): ResponseEntity<BookResponse> {
-        return ResponseEntity(bookListService.findById(id), HttpStatus.OK)
-    }
-
-    @PutMapping("/update")
-    fun updateBook(@RequestBody updateBookRequest: UpdateBookRequest): ResponseEntity<BookResponse> {
-        return ResponseEntity(bookUpdateService.updateBook(updateBookRequest), HttpStatus.OK)
-    }
 }
+

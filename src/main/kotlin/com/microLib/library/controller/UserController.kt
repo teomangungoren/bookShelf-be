@@ -7,6 +7,7 @@ import com.microLib.library.domain.request.SignInRequest
 import com.microLib.library.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -27,9 +28,9 @@ class UserController(private val userService: UserService) {
         return ResponseEntity(userService.authenticate(signInRequest),HttpStatus.OK)
     }
 
-    @PostMapping("/password")
-    fun changePassword(@RequestBody changePasswordRequest: ChangePasswordRequest, principal: Principal):ResponseEntity<*>{
-        return ResponseEntity(userService.changePassword(changePasswordRequest,principal),HttpStatus.OK)
+    @PatchMapping("/password")
+    fun changePassword(@RequestBody changePasswordRequest: ChangePasswordRequest):ResponseEntity<*>{
+        return ResponseEntity(userService.changePassword(changePasswordRequest),HttpStatus.OK)
     }
 
 
