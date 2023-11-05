@@ -28,6 +28,11 @@ class UserController(private val userService: UserService) {
         return ResponseEntity(userService.authenticate(signInRequest),HttpStatus.OK)
     }
 
+    @PostMapping("/refresh")
+    fun refreshToken(@RequestBody signInRequest: SignInRequest):ResponseEntity<AuthenticationResponse>{
+        return ResponseEntity(userService.refreshToken(signInRequest),HttpStatus.OK)
+    }
+
     @PatchMapping("/password")
     fun changePassword(@RequestBody changePasswordRequest: ChangePasswordRequest):ResponseEntity<*>{
         return ResponseEntity(userService.changePassword(changePasswordRequest),HttpStatus.OK)

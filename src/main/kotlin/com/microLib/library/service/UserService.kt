@@ -32,8 +32,9 @@ class UserService(private val userRepository: UserRepository,
         }
         val user=userRepository.save(RegisterUserRequest.toUser(request,passwordEncoder ))
        val jwtToken=jwtService.generateToken(user)
+        val refreshToken=jwtService.generateRefreshToken(user)
         createToken(jwtToken, user)
-        return AuthenticationResponse(jwtToken)
+        return AuthenticationResponse(jwtToken,refreshToken)
     }
 
     fun changePassword(request: ChangePasswordRequest){
@@ -59,9 +60,10 @@ class UserService(private val userRepository: UserRepository,
         val user= userRepository.findByEmail(request.email)?:
         throw UserNotFoundException("User with email ${request.email} not found")
        val jwtToken= jwtService.generateToken(user)
+        val refreshToken=jwtService.generateRefreshToken(user)
         revokeAllUserTokens(user)
         createToken(jwtToken, user)
-        return AuthenticationResponse(jwtToken)
+        return AuthenticationResponse(jwtToken,refreshToken)
     }
 
     private fun createToken(jwtToken: String, user: User) {
@@ -75,6 +77,8 @@ class UserService(private val userRepository: UserRepository,
         )
         tokenRepository.save(token)
     }
+
+    //fun refreshToken()
 
     private fun revokeAllUserTokens(user:User){
         val validToken=tokenRepository.findAllValidTokensByUser(user.id!!)

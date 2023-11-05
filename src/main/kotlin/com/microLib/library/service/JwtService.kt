@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 import java.security.Key
 import java.util.Base64
 import java.util.Date
+import kotlin.math.exp
 
 @Service
 class JwtService {
@@ -18,17 +19,28 @@ class JwtService {
     }
 
     fun generateToken(extractClaims: Map<String, Any>, userDetails: UserDetails): String {
-        return Jwts
-            .builder()
-            .setSubject(userDetails.username)
-            .setIssuedAt(Date(System.currentTimeMillis()))
-            .setExpiration(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
-            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-            .compact()
+        return buildToken(extractClaims, userDetails, JWT_EXPIRATION)
     }
 
     fun generateToken(userDetails: UserDetails): String {
         return generateToken(emptyMap(), userDetails)
+    }
+
+    fun generateRefreshToken(userDetails: UserDetails): String {
+        return buildToken(emptyMap(), userDetails, REFRESH_EXPIRATION)
+    }
+
+    private fun buildToken(extractClaims: Map<String, Any>,
+                   userDetails: UserDetails,
+                   expiration:Long):String{
+        return Jwts
+            .builder()
+            .setClaims(extractClaims)
+            .setSubject(userDetails.username)
+            .setIssuedAt(Date(System.currentTimeMillis()))
+            .setExpiration(Date(System.currentTimeMillis() + expiration))
+            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+            .compact()
     }
 
     fun isValidToken(token: String, userDetails: UserDetails): Boolean {
@@ -63,6 +75,10 @@ class JwtService {
     }
 
     companion object {
-        private const val SECRET_KEY: String = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+         const val SECRET_KEY: String = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+         const val JWT_EXPIRATION=86400000L
+         const val REFRESH_EXPIRATION=604800000L
+
+
     }
 }
