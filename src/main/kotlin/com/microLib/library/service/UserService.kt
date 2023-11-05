@@ -1,5 +1,6 @@
 package com.microLib.library.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.microLib.library.domain.enum.TokenType
 import com.microLib.library.domain.model.Token
 import com.microLib.library.domain.model.User
@@ -12,6 +13,9 @@ import com.microLib.library.exception.UserAlreadyExistException
 import com.microLib.library.exception.UserNotFoundException
 import com.microLib.library.repository.TokenRepository
 import com.microLib.library.repository.UserRepository
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -78,7 +82,25 @@ class UserService(private val userRepository: UserRepository,
         tokenRepository.save(token)
     }
 
-    //fun refreshToken()
+    fun refreshToken(request:HttpServletRequest,response:HttpServletResponse){
+        val authHeader=request.getHeader(HttpHeaders.AUTHORIZATION)
+        if(authHeader==null || !authHeader.startsWith("Bearer ")) return
+        val refreshToken=authHeader.substring(7)
+        val userEmail=jwtService.extractUsername(refreshToken)
+        if(userEmail!=null){
+            val user=userRepository.findByEmail(userEmail)?:throw UserNotFoundException("User with email $userEmail not found")
+            if(jwtService.isValidToken(refreshToken,user)){
+                val accessToken=jwtService.generateToken(user)
+                revokeAllUserTokens(user)
+                createToken(accessToken,user)
+                val authenticationResponse=AuthenticationResponse(accessToken,refreshToken)
+                ObjectMapper().writeValue(response.outputStream,authenticationResponse)
+
+            }
+        }
+
+
+    }
 
     private fun revokeAllUserTokens(user:User){
         val validToken=tokenRepository.findAllValidTokensByUser(user.id!!)

@@ -5,6 +5,8 @@ import com.microLib.library.domain.request.ChangePasswordRequest
 import com.microLib.library.domain.request.RegisterUserRequest
 import com.microLib.library.domain.request.SignInRequest
 import com.microLib.library.service.UserService
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PatchMapping
@@ -19,24 +21,24 @@ import java.security.Principal
 class UserController(private val userService: UserService) {
 
     @PostMapping("/register")
-    fun register(@RequestBody registerUserRequest: RegisterUserRequest):ResponseEntity<AuthenticationResponse>{
-        return ResponseEntity(userService.registerUser(registerUserRequest),HttpStatus.CREATED)
+    fun register(@RequestBody registerUserRequest: RegisterUserRequest): ResponseEntity<AuthenticationResponse> {
+        return ResponseEntity(userService.registerUser(registerUserRequest), HttpStatus.CREATED)
     }
 
     @PostMapping("/authenticate")
-    fun authenticate(@RequestBody signInRequest: SignInRequest):ResponseEntity<AuthenticationResponse>{
-        return ResponseEntity(userService.authenticate(signInRequest),HttpStatus.OK)
+    fun authenticate(@RequestBody signInRequest: SignInRequest): ResponseEntity<AuthenticationResponse> {
+        return ResponseEntity(userService.authenticate(signInRequest), HttpStatus.OK)
     }
 
     @PostMapping("/refresh")
-    fun refreshToken(@RequestBody signInRequest: SignInRequest):ResponseEntity<AuthenticationResponse>{
-        return ResponseEntity(userService.refreshToken(signInRequest),HttpStatus.OK)
+    fun refreshToken(httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse) {
+        userService.refreshToken(httpServletRequest, httpServletResponse)
     }
+
 
     @PatchMapping("/password")
-    fun changePassword(@RequestBody changePasswordRequest: ChangePasswordRequest):ResponseEntity<*>{
-        return ResponseEntity(userService.changePassword(changePasswordRequest),HttpStatus.OK)
+    fun changePassword(@RequestBody changePasswordRequest: ChangePasswordRequest): ResponseEntity<*> {
+        return ResponseEntity(userService.changePassword(changePasswordRequest), HttpStatus.OK)
     }
-
 
 }
