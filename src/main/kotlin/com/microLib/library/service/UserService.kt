@@ -1,21 +1,17 @@
 package com.microLib.library.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.microLib.library.domain.enum.TokenType
 import com.microLib.library.domain.model.Token
 import com.microLib.library.domain.model.User
 import com.microLib.library.domain.request.ChangePasswordRequest
 import com.microLib.library.domain.request.RegisterUserRequest
 import com.microLib.library.domain.request.SignInRequest
-import com.microLib.library.domain.response.TokenResponse
+import com.microLib.library.domain.response.AuthenticationResponse
 import com.microLib.library.domain.response.UserResponse
 import com.microLib.library.exception.UserAlreadyExistException
 import com.microLib.library.exception.UserNotFoundException
 import com.microLib.library.repository.TokenRepository
 import com.microLib.library.repository.UserRepository
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
-import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -30,7 +26,7 @@ class UserService(private val userRepository: UserRepository,
                   private val passwordEncoder: PasswordEncoder) {
 
 
-    fun registerUser(request: RegisterUserRequest): UserResponse {
+    fun registerUser(request: RegisterUserRequest): AuthenticationResponse {
         if (userRepository.existsByEmail(request.email) || userRepository.existsByPhoneNumber(request.phoneNumber)) {
                 throw UserAlreadyExistException("User already exist")
         }
@@ -51,7 +47,7 @@ class UserService(private val userRepository: UserRepository,
            userRepository.save(user)
     }
 
-    fun authenticate(request: SignInRequest): TokenResponse {
+    fun authenticate(request: SignInRequest): AuthenticationResponse {
         authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
                 request.email,

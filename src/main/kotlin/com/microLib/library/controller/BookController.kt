@@ -28,14 +28,12 @@ class BookController(
 ) {
     private val logger = LoggerFactory.getLogger(BookController::class.java)
 
-    @PostMapping
+    @PostMapping("/create")
     @PreAuthorize("hasRole('USER')")
     fun saveBook(@RequestBody createBookRequest: CreateBookRequest): ResponseEntity<BookResponse> {
         logger.info("BookController.saveBook() called with: createBookRequest = [$createBookRequest]")
         return ResponseEntity.status(HttpStatus.CREATED).body(bookSaveService.createBook(createBookRequest))
     }
-
-
     @PreAuthorize("hasRole('USER')")
     @GetMapping
     fun getBookList(): ResponseEntity<List<BookResponse>> {
