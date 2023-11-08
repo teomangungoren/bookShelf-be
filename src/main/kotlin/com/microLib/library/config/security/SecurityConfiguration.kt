@@ -46,7 +46,7 @@ class SecurityConfiguration(
             .logout {logout->
                 logout.logoutUrl("/api/v1/users/logout")
                 logout.addLogoutHandler(logoutService)
-                    .logoutSuccessHandler { request, response, authentication -> SecurityContextHolder.clearContext() }
+                    .logoutSuccessHandler { _, _, _ -> SecurityContextHolder.clearContext() }
             }
             .build()
     }

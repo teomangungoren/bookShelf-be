@@ -1,17 +1,21 @@
 package com.microLib.library.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.microLib.library.domain.enum.TokenType
 import com.microLib.library.domain.model.Token
 import com.microLib.library.domain.model.User
 import com.microLib.library.domain.request.ChangePasswordRequest
 import com.microLib.library.domain.request.RegisterUserRequest
 import com.microLib.library.domain.request.SignInRequest
-import com.microLib.library.domain.response.AuthenticationResponse
+import com.microLib.library.domain.response.TokenResponse
 import com.microLib.library.domain.response.UserResponse
 import com.microLib.library.exception.UserAlreadyExistException
 import com.microLib.library.exception.UserNotFoundException
 import com.microLib.library.repository.TokenRepository
 import com.microLib.library.repository.UserRepository
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -26,14 +30,12 @@ class UserService(private val userRepository: UserRepository,
                   private val passwordEncoder: PasswordEncoder) {
 
 
-    fun registerUser(request: RegisterUserRequest): AuthenticationResponse {
+    fun registerUser(request: RegisterUserRequest): UserResponse {
         if (userRepository.existsByEmail(request.email) || userRepository.existsByPhoneNumber(request.phoneNumber)) {
                 throw UserAlreadyExistException("User already exist")
         }
         val user=userRepository.save(RegisterUserRequest.toUser(request,passwordEncoder ))
-       val jwtToken=jwtService.generateToken(user)
-        createToken(jwtToken, user)
-        return AuthenticationResponse(jwtToken)
+        return UserResponse.convert(user)
     }
 
     fun changePassword(request: ChangePasswordRequest){
@@ -49,7 +51,7 @@ class UserService(private val userRepository: UserRepository,
            userRepository.save(user)
     }
 
-    fun authenticate(request: SignInRequest): AuthenticationResponse {
+    fun authenticate(request: SignInRequest): TokenResponse {
         authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
                 request.email,
@@ -59,9 +61,10 @@ class UserService(private val userRepository: UserRepository,
         val user= userRepository.findByEmail(request.email)?:
         throw UserNotFoundException("User with email ${request.email} not found")
        val jwtToken= jwtService.generateToken(user)
+        val expirationDate=jwtService.extractExpiration(jwtToken)
         revokeAllUserTokens(user)
         createToken(jwtToken, user)
-        return AuthenticationResponse(jwtToken)
+        return TokenResponse(jwtToken,expirationDate)
     }
 
     private fun createToken(jwtToken: String, user: User) {
