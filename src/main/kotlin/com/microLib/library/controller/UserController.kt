@@ -1,9 +1,10 @@
 package com.microLib.library.controller
 
-import com.microLib.library.domain.response.AuthenticationResponse
 import com.microLib.library.domain.request.ChangePasswordRequest
 import com.microLib.library.domain.request.RegisterUserRequest
 import com.microLib.library.domain.request.SignInRequest
+import com.microLib.library.domain.response.TokenResponse
+import com.microLib.library.domain.response.UserResponse
 import com.microLib.library.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.security.Principal
 
 @RestController
 @RequestMapping("/api/v1/users")

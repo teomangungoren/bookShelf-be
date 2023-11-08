@@ -26,7 +26,6 @@ class SecurityConfiguration(
 
        // val clearSideData:HeaderWriterLogoutHandler= HeaderWriterLogoutHandler(ClearSiteDataHeaderWriter())
         return http
-            .cors { it.disable() }
             .csrf { it.disable() }
             .authorizeHttpRequests {
                     requests ->

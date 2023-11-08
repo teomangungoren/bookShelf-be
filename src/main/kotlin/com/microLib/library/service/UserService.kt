@@ -6,7 +6,7 @@ import com.microLib.library.domain.model.User
 import com.microLib.library.domain.request.ChangePasswordRequest
 import com.microLib.library.domain.request.RegisterUserRequest
 import com.microLib.library.domain.request.SignInRequest
-import com.microLib.library.domain.response.AuthenticationResponse
+import com.microLib.library.domain.response.TokenResponse
 import com.microLib.library.domain.response.UserResponse
 import com.microLib.library.exception.UserAlreadyExistException
 import com.microLib.library.exception.UserNotFoundException
@@ -26,7 +26,7 @@ class UserService(private val userRepository: UserRepository,
                   private val passwordEncoder: PasswordEncoder) {
 
 
-    fun registerUser(request: RegisterUserRequest): AuthenticationResponse {
+    fun registerUser(request: RegisterUserRequest): UserResponse {
         if (userRepository.existsByEmail(request.email) || userRepository.existsByPhoneNumber(request.phoneNumber)) {
                 throw UserAlreadyExistException("User already exist")
         }
@@ -47,7 +47,7 @@ class UserService(private val userRepository: UserRepository,
            userRepository.save(user)
     }
 
-    fun authenticate(request: SignInRequest): AuthenticationResponse {
+    fun authenticate(request: SignInRequest): TokenResponse {
         authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
                 request.email,

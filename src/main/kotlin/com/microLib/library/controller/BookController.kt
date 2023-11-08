@@ -1,5 +1,6 @@
 package com.microLib.library.controller
 
+import com.microLib.library.domain.model.Book
 import com.microLib.library.domain.response.BookResponse
 import com.microLib.library.domain.request.CreateBookRequest
 import com.microLib.library.domain.request.UpdateBookRequest
@@ -28,13 +29,15 @@ class BookController(
 ) {
     private val logger = LoggerFactory.getLogger(BookController::class.java)
 
-    @PostMapping("/create")
-    @PreAuthorize("hasRole('USER')")
+    @PostMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
     fun saveBook(@RequestBody createBookRequest: CreateBookRequest): ResponseEntity<BookResponse> {
         logger.info("BookController.saveBook() called with: createBookRequest = [$createBookRequest]")
         return ResponseEntity.status(HttpStatus.CREATED).body(bookSaveService.createBook(createBookRequest))
     }
-    @PreAuthorize("hasRole('USER')")
+
+
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     fun getBookList(): ResponseEntity<List<BookResponse>> {
         return ResponseEntity(bookListService.listBook(), HttpStatus.OK)
@@ -44,5 +47,14 @@ class BookController(
     fun getBookByIsbn(@PathVariable isbn: String): ResponseEntity<BookResponse> {
         return ResponseEntity(bookListService.findByIsbn(isbn), HttpStatus.OK)
     }
-}
 
+    @GetMapping("/book/id/{id}")
+    fun getBookById(@PathVariable id: String): ResponseEntity<Book> {
+        return ResponseEntity(bookListService.findById(id), HttpStatus.OK)
+    }
+
+    @PutMapping("/update")
+    fun updateBook(@RequestBody updateBookRequest: UpdateBookRequest): ResponseEntity<BookResponse> {
+        return ResponseEntity(bookUpdateService.updateBook(updateBookRequest), HttpStatus.OK)
+    }
+}

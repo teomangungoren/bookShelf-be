@@ -3,6 +3,7 @@ package com.microLib.library.service
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
@@ -18,27 +19,20 @@ class JwtService {
         return extractClaim(token, Claims::getSubject)
     }
 
-    fun generateToken(extractClaims: Map<String, Any>, userDetails: UserDetails): String {
-        return buildToken(extractClaims, userDetails, JWT_EXPIRATION)
-    }
-
-    fun generateToken(userDetails: UserDetails): String {
-        return generateToken(emptyMap(), userDetails)
-    }
-
-    fun generateRefreshToken(userDetails: UserDetails): String {
-        return buildToken(emptyMap(), userDetails, REFRESH_EXPIRATION)
+    fun generateToken( userDetails: UserDetails): String {
+        val authorities=userDetails.authorities.map { it.authority }
+        val claims= mapOf("authorities" to authorities)
+        return buildToken(claims,userDetails)
     }
 
     private fun buildToken(extractClaims: Map<String, Any>,
-                   userDetails: UserDetails,
-                   expiration:Long):String{
+                   userDetails: UserDetails):String{
         return Jwts
             .builder()
             .setClaims(extractClaims)
             .setSubject(userDetails.username)
             .setIssuedAt(Date(System.currentTimeMillis()))
-            .setExpiration(Date(System.currentTimeMillis() + expiration))
+            .setExpiration(Date(System.currentTimeMillis() + 1000 *  60 * 60 * 10  ))
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact()
     }
@@ -70,15 +64,11 @@ class JwtService {
     }
 
     fun getSignInKey(): Key {
-        val keyBytes = Base64.getDecoder().decode(SECRET_KEY)
+        val keyBytes = Decoders.BASE64.decode(SECRET_KEY)
         return Keys.hmacShaKeyFor(keyBytes)
     }
 
     companion object {
          const val SECRET_KEY: String = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
-         const val JWT_EXPIRATION=86400000L
-         const val REFRESH_EXPIRATION=604800000L
-
-
     }
 }
