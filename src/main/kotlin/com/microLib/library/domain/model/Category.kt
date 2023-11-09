@@ -16,5 +16,5 @@ data class Category(
     val id: String? = null,
     val name: String,
     @OneToMany(mappedBy = "category")
-    val books: List<Book>
+    val books: List<Book> ?= emptyList()
 )

@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/books")
-
 class BookController(
     private val bookListService: BookListService,
     private val bookSaveService: BookSaveService,
@@ -30,7 +29,7 @@ class BookController(
     private val logger = LoggerFactory.getLogger(BookController::class.java)
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     fun saveBook(@RequestBody createBookRequest: CreateBookRequest): ResponseEntity<BookResponse> {
         logger.info("BookController.saveBook() called with: createBookRequest = [$createBookRequest]")
         return ResponseEntity.status(HttpStatus.CREATED).body(bookSaveService.createBook(createBookRequest))
@@ -44,6 +43,7 @@ class BookController(
     }
 
     @GetMapping("/book/isbn/{isbn}")
+    @PreAuthorize("hasAuthority('USER')")
     fun getBookByIsbn(@PathVariable isbn: String): ResponseEntity<BookResponse> {
         return ResponseEntity(bookListService.findByIsbn(isbn), HttpStatus.OK)
     }
