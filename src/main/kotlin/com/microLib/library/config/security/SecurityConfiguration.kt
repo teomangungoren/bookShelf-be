@@ -33,7 +33,7 @@ class SecurityConfiguration(
                     .requestMatchers(AntPathRequestMatcher("/api/v1/users/**"))
                     .permitAll()
                     .anyRequest()
-                    .hasAnyAuthority("USER")
+                    .authenticated()
             }
             .sessionManagement {
                     sessionManagement ->

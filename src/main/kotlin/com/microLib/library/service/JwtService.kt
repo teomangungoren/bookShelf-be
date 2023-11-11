@@ -1,5 +1,6 @@
 package com.microLib.library.service
 
+import com.microLib.library.domain.model.User
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -8,6 +9,7 @@ import io.jsonwebtoken.security.Keys
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.security.Key
+import java.time.LocalDateTime
 import java.util.Base64
 import java.util.Date
 import kotlin.math.exp
@@ -19,20 +21,22 @@ class JwtService {
         return extractClaim(token, Claims::getSubject)
     }
 
-    fun generateToken( userDetails: UserDetails): String {
-        val authorities=userDetails.authorities.map { it.authority }
-        val claims= mapOf("authorities" to authorities)
-        return buildToken(claims,userDetails)
+    fun generateToken( user: UserDetails): String {
+        val claims= user.authorities.joinToString { it.authority }.let {
+            mapOf("roles" to it)
+        }
+        val expirationDate=LocalDateTime.now().plusHours(10)
+        return buildToken(claims,user, expirationDate.toDate())
     }
 
     private fun buildToken(extractClaims: Map<String, Any>,
-                   userDetails: UserDetails):String{
+                   userDetails: UserDetails,expiration:Date):String{
         return Jwts
             .builder()
             .setClaims(extractClaims)
             .setSubject(userDetails.username)
-            .setIssuedAt(Date(System.currentTimeMillis()))
-            .setExpiration(Date(System.currentTimeMillis() + 1000 *  60 * 60 * 10  ))
+            .setIssuedAt(LocalDateTime.now().toDate())
+            .setExpiration(expiration)
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact()
     }
@@ -66,6 +70,10 @@ class JwtService {
     fun getSignInKey(): Key {
         val keyBytes = Decoders.BASE64.decode(SECRET_KEY)
         return Keys.hmacShaKeyFor(keyBytes)
+    }
+
+    fun LocalDateTime.toDate():Date{
+        return Date.from(this.atZone(java.time.ZoneId.systemDefault()).toInstant())
     }
 
     companion object {
