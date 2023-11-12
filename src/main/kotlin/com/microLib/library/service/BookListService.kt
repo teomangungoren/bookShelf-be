@@ -4,7 +4,6 @@ import com.microLib.library.domain.model.Book
 import com.microLib.library.domain.response.BookResponse
 import com.microLib.library.exception.BookNotFoundException
 import com.microLib.library.repository.BookRepository
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,7 +13,7 @@ class BookListService(
 ) {
 
 
-    @PreAuthorize("hasRole('USER')")
+
     fun listBook(): List<BookResponse> {
         return bookRepository
             .findAll()

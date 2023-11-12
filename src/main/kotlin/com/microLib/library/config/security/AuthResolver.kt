@@ -7,19 +7,24 @@ import org.springframework.stereotype.Component
 @Component
 class AuthResolver {
 
-    fun UsernamePasswordAuthenticationToken.getUsername(): String {
-        val principalPair = this.principal as Pair<String, String>
-        return principalPair.first
+    fun getUsernamePasswordAuthenticationToken(): UsernamePasswordAuthenticationToken {
+        val authentication = SecurityContextHolder.getContext().authentication
+        require (authentication is UsernamePasswordAuthenticationToken) {
+            throw IllegalStateException("Authentication is not a UsernamePasswordAuthenticationToken")
+        }
+        return authentication
+    }
+
+    fun getUserId(): String {
+        return getUsernamePasswordAuthenticationToken().getUserId()
+    }
+
+    fun <T> withAuth(body: (UsernamePasswordAuthenticationToken) -> T): T {
+        return body(getUsernamePasswordAuthenticationToken())
     }
 
     fun UsernamePasswordAuthenticationToken.getUserId(): String {
-        val principalPair = this.principal as Pair<String, String>
-        return principalPair.second
+        val principal = this.principal as? Pair<*, *> ?: throw IllegalStateException("Principal is not a Pair")
+        return principal.second.toString()
     }
-
-    fun getAuth(): UsernamePasswordAuthenticationToken {
-        return SecurityContextHolder.getContext().authentication as UsernamePasswordAuthenticationToken
-    }
-
-    fun <T> withAuth(body: (UsernamePasswordAuthenticationToken) -> T): T = body(getAuth())
 }

@@ -17,12 +17,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 import java.util.Date
 
 @Service
 class UserService(private val userRepository: UserRepository,
-                  private val jwtService: JwtService,
+                  private val tokenService: TokenService,
                   private val tokenRepository: TokenRepository,
                   private val authenticationManager: AuthenticationManager,
                   private val passwordEncoder: PasswordEncoder) {
@@ -38,13 +37,8 @@ class UserService(private val userRepository: UserRepository,
 
     fun changePassword(request: ChangePasswordRequest){
         val user=userRepository.findByEmail(SecurityContextHolder.getContext().authentication.name)?:throw UserNotFoundException("User not found")
-
-           if(!passwordEncoder.matches(request.oldPassword,user.password)){
-               throw IllegalArgumentException("Old password is not correct")
-           }
-           if(!request.newPassword.equals(request.confirmPassword)){
-               throw IllegalArgumentException("New password and confirm password does not match")
-           }
+           require(passwordEncoder.matches(request.oldPassword,user.password)){ throw IllegalArgumentException("Old password is not correct") }
+           require(request.newPassword.equals(request.confirmPassword)){ throw IllegalArgumentException("New password and confirm password does not match") }
            user.password=passwordEncoder.encode(request.newPassword)
            userRepository.save(user)
     }
@@ -58,23 +52,11 @@ class UserService(private val userRepository: UserRepository,
         )
         val user= userRepository.findByEmail(request.email)?:
         throw UserNotFoundException("User with email ${request.email} not found")
-       val jwtToken= jwtService.generateToken(user)
-        val expirationDate=jwtService.extractExpiration(jwtToken)
+       val jwtToken= tokenService.generateToken(user)
+        val expirationDate=tokenService.extractExpiration(jwtToken)
         revokeAllUserTokens(user)
-        createToken(jwtToken, user)
+        tokenRepository.save(Token("",jwtToken,TokenType.BEARER,false,false,user))
         return TokenResponse(jwtToken,Date(System.currentTimeMillis()),expirationDate)
-    }
-
-    private fun createToken(jwtToken: String, user: User) {
-        val token = Token(
-            null,
-            jwtToken,
-            TokenType.BEARER,
-            false,
-            false,
-            user
-        )
-        tokenRepository.save(token)
     }
 
     private fun revokeAllUserTokens(user:User){

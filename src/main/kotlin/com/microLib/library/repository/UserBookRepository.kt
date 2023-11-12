@@ -6,5 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserBookRepository: JpaRepository<UserBook, String>{
 
-    fun existsByBookIdAndUserId(bookId: String,userId:String): Boolean
+    fun existsByBookIdAndUsername(bookId: String,username:String): Boolean
+
+    fun findByUsername(username: String): List<UserBook>?
 }

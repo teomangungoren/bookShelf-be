@@ -28,29 +28,32 @@ class BookController(
 ) {
     private val logger = LoggerFactory.getLogger(BookController::class.java)
 
-    @PostMapping
     @PreAuthorize("hasAuthority('USER')")
+    @PostMapping
     fun saveBook(@RequestBody createBookRequest: CreateBookRequest): ResponseEntity<BookResponse> {
         logger.info("BookController.saveBook() called with: createBookRequest = [$createBookRequest]")
         return ResponseEntity.status(HttpStatus.CREATED).body(bookSaveService.createBook(createBookRequest))
     }
+
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     fun getBookList(): ResponseEntity<List<BookResponse>> {
         return ResponseEntity(bookListService.listBook(), HttpStatus.OK)
     }
 
-    @GetMapping("/book/isbn/{isbn}")
+
     @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/book/isbn/{isbn}")
     fun getBookByIsbn(@PathVariable isbn: String): ResponseEntity<BookResponse> {
         return ResponseEntity(bookListService.findByIsbn(isbn), HttpStatus.OK)
     }
-
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/book/id/{id}")
     fun getBookById(@PathVariable id: String): ResponseEntity<Book> {
         return ResponseEntity(bookListService.findById(id), HttpStatus.OK)
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/update")
     fun updateBook(@RequestBody updateBookRequest: UpdateBookRequest): ResponseEntity<BookResponse> {
         return ResponseEntity(bookUpdateService.updateBook(updateBookRequest), HttpStatus.OK)

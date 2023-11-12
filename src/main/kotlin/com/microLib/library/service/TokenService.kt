@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 import java.util.Date
 
 @Service
-class JwtService {
+class TokenService {
 
     fun extractUsername(token: String): String {
         return extractClaim(token, Claims::getSubject)

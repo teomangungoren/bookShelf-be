@@ -13,7 +13,7 @@ data class UserBook(
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Id
     val id: String? = null,
-    val userId: String,
+    val username: String,
     val bookId: String,
 ) {
 }

@@ -28,7 +28,6 @@ class UserWishListService(private val userWishListRepository: UserWishListReposi
 
     }
 
-
     private fun checkBookExistsByUser(userId:String,bookId:String){
         if(userWishListRepository.existsByUserIdAndBookId(userId,bookId)){
             throw BookAlreadyExistException("Book already exists in user's wish list")

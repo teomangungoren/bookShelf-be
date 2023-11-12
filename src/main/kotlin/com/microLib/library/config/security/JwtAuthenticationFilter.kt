@@ -1,7 +1,7 @@
 package com.microLib.library.config.security
 
 import com.microLib.library.repository.TokenRepository
-import com.microLib.library.service.JwtService
+import com.microLib.library.service.TokenService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -14,7 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthenticationFilter(
-    private val jwtService: JwtService,
+    private val tokenService: TokenService,
     private val userDetailsService: UserDetailsService,
     private val tokenRepository: TokenRepository
 ) : OncePerRequestFilter() {
@@ -30,13 +30,13 @@ class JwtAuthenticationFilter(
             return
         }
         val jwt = authHeader.substring(7)
-        val userEmail = jwtService.extractUsername(jwt)
+        val userEmail = tokenService.extractUsername(jwt)
         if (userEmail != null && SecurityContextHolder.getContext().authentication == null) {
             val userDetails = this.userDetailsService.loadUserByUsername(userEmail)
             val isValidToken=tokenRepository.findByToken(jwt)?.let {
                 token->!token.expired && !token.revoked
             }?:false
-            if (jwtService.isValidToken(jwt, userDetails) && isValidToken) {
+            if (tokenService.isValidToken(jwt, userDetails) && isValidToken) {
                 val authToken = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
                 authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
                 SecurityContextHolder.getContext().authentication = authToken
