@@ -10,7 +10,7 @@ data class UserWishListResponse(
         fun convert(from: UserWishList): UserWishListResponse {
             return UserWishListResponse(
                 bookId = from.bookId,
-                userId = from.userId
+                userId = from.username
             )
         }
     }

@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -19,7 +20,7 @@ class UserBookController(private val userBookService: UserBookService){
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/create")
-    fun createUserBook(request:UserBookRequest):ResponseEntity<UserBookResponse>{
+    fun createUserBook(@RequestBody request:UserBookRequest):ResponseEntity<UserBookResponse>{
         return ResponseEntity(userBookService.create(request),HttpStatus.CREATED)
     }
 

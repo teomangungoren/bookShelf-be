@@ -13,21 +13,17 @@ class UserBookService(private val userBookRepository: UserBookRepository,
                       private val bookListService: BookListService,) {
 
     fun create(request:UserBookRequest):UserBookResponse{
-        val email=SecurityContextHolder.getContext().authentication.name
+        val username=SecurityContextHolder.getContext().authentication.name
         val book=bookListService.findById(request.bookId)
-        checkBookExistsByBookId(book.id!!,email)
-        val userBook=userBookRepository.save(UserBook("",book.id,email))
+        checkBookExistsByBookId(book.id!!,username)
+        val userBook=userBookRepository.save(UserBook("",username,book.id))
         return UserBookResponse.convert(userBook)
     }
 
     fun getAllByUsername(username:String):List<UserBook>{
         return userBookRepository.findByUsername(username)?:throw IllegalArgumentException("User not found")
     }
-
-
-
-
-    private fun checkBookExistsByBookId(bookId:String,username:String){
+    fun checkBookExistsByBookId(bookId:String,username:String){
         require(!userBookRepository.existsByBookIdAndUsername(bookId,username)){
             throw BookAlreadyExistException("Book already exists in user's book list")
         }

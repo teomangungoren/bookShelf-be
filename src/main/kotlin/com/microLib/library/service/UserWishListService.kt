@@ -5,31 +5,35 @@ import com.microLib.library.domain.model.UserWishList
 import com.microLib.library.domain.response.UserWishListResponse
 import com.microLib.library.exception.BookAlreadyExistException
 import com.microLib.library.exception.BookNotFoundException
+import com.microLib.library.exception.UserNotFoundException
 import com.microLib.library.repository.UserWishListRepository
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
-class UserWishListService(private val userWishListRepository: UserWishListRepository,
-                          private val bookListService: BookListService) {
+class UserWishListService(
+    private val userWishListRepository: UserWishListRepository,
+    private val bookListService: BookListService,
+    private val userBookService: UserBookService) {
 
-    fun create(request: CreateUserWishListRequest,userId:String):UserWishListResponse{
+    fun create(request: CreateUserWishListRequest):UserWishListResponse{
+        val username=SecurityContextHolder.getContext().authentication.name
         val book=bookListService.findById(request.bookId)
-        checkBookExistsByUser(request.userId,request.bookId)
+        userBookService.checkBookExistsByBookId(book.id!!,username)
+        checkBookExistsByUser(username,request.bookId)
         val userWishList=userWishListRepository.save(UserWishList(
-            bookId = book.id!!,
-            userId = request.userId))
+            bookId = book.id,
+            username = username))
         return UserWishListResponse.convert(userWishList)
     }
 
-    fun delete(userWishListId:String,userId:String){
-        val userWishList=userWishListRepository.findBookByUserIdAndBookId(userId,userWishListId)?.let {
-         userWishListRepository.delete(it)
-        }?:throw BookNotFoundException("Book not found in user's wish list")
-
+    fun getAllByUsername(username:String):List<UserWishList>{
+        return userWishListRepository.findByUsername(username)?:throw UserNotFoundException("User not found with username $username")
     }
 
-    private fun checkBookExistsByUser(userId:String,bookId:String){
-        if(userWishListRepository.existsByUserIdAndBookId(userId,bookId)){
+
+    private fun checkBookExistsByUser(username:String,bookId:String){
+        if(userWishListRepository.existsByBookIdAndUsername(bookId,username)){
             throw BookAlreadyExistException("Book already exists in user's wish list")
         }
     }
