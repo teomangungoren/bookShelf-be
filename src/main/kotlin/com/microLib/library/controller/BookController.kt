@@ -34,8 +34,6 @@ class BookController(
         logger.info("BookController.saveBook() called with: createBookRequest = [$createBookRequest]")
         return ResponseEntity.status(HttpStatus.CREATED).body(bookSaveService.createBook(createBookRequest))
     }
-
-
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     fun getBookList(): ResponseEntity<List<BookResponse>> {

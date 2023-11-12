@@ -17,6 +17,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.util.Date
 
 @Service
 class UserService(private val userRepository: UserRepository,
@@ -60,7 +62,7 @@ class UserService(private val userRepository: UserRepository,
         val expirationDate=jwtService.extractExpiration(jwtToken)
         revokeAllUserTokens(user)
         createToken(jwtToken, user)
-        return TokenResponse(jwtToken,expirationDate)
+        return TokenResponse(jwtToken,Date(System.currentTimeMillis()),expirationDate)
     }
 
     private fun createToken(jwtToken: String, user: User) {

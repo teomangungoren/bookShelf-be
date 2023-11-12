@@ -10,9 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.security.Key
 import java.time.LocalDateTime
-import java.util.Base64
 import java.util.Date
-import kotlin.math.exp
 
 @Service
 class JwtService {
@@ -22,21 +20,21 @@ class JwtService {
     }
 
     fun generateToken( user: UserDetails): String {
-        val claims= user.authorities.joinToString { it.authority }.let {
-            mapOf("roles" to it)
-        }
-        val expirationDate=LocalDateTime.now().plusHours(10)
-        return buildToken(claims,user, expirationDate.toDate())
+        val claims= mapOf(
+            "roles" to user.authorities.joinToString { it.authority },
+            "userId" to (user as User).id!!,
+        )
+        return buildToken(claims,user)
     }
 
     private fun buildToken(extractClaims: Map<String, Any>,
-                   userDetails: UserDetails,expiration:Date):String{
+                   userDetails: UserDetails):String{
         return Jwts
             .builder()
             .setClaims(extractClaims)
             .setSubject(userDetails.username)
-            .setIssuedAt(LocalDateTime.now().toDate())
-            .setExpiration(expiration)
+            .setIssuedAt(Date(System.currentTimeMillis()))
+            .setExpiration(Date(System.currentTimeMillis() + 1000 * 60 * 60 ))
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact()
     }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 class UserWishListService(private val userWishListRepository: UserWishListRepository,
                           private val bookListService: BookListService) {
 
-    fun create(request: CreateUserWishListRequest):UserWishListResponse{
+    fun create(request: CreateUserWishListRequest,userId:String):UserWishListResponse{
         val book=bookListService.findById(request.bookId)
         checkBookExistsByUser(request.userId,request.bookId)
         val userWishList=userWishListRepository.save(UserWishList(

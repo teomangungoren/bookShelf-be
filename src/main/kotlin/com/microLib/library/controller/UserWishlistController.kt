@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/user/wishlist")
 class UserWishlistController(private val categoryService: CategoryService) {
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{id}")
     fun getWishlist(@PathVariable id:String):ResponseEntity<Category>{
         return ResponseEntity(categoryService.findById(id),org.springframework.http.HttpStatus.OK)

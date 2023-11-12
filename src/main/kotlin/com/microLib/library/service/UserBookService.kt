@@ -11,16 +11,17 @@ import org.springframework.stereotype.Service
 class UserBookService(private val userBookRepository: UserBookRepository,
                       private val bookListService: BookListService) {
 
-    fun create(request:UserBookRequest):UserBookResponse{
+    fun create(request:UserBookRequest,userId:String):UserBookResponse{
         val book=bookListService.findById(request.bookId)
-        checkBookExistsByBookId(book.id!!)
-        val userBook=userBookRepository.save(UserBook("",book.id,request.userId!!))
+        checkBookExistsByBookId(book.id!!,userId)
+        val userBook=userBookRepository.save(UserBook("",book.id,userId))
         return UserBookResponse.convert(userBook)
     }
 
-    private fun checkBookExistsByBookId(bookId:String){
-        if(userBookRepository.existsByBookId(bookId)){
-            throw BookAlreadyExistException("Book already exists in user's wish list")
+
+    private fun checkBookExistsByBookId(bookId:String,userId:String){
+        if(userBookRepository.existsByBookIdAndUserId(bookId,userId)){
+            throw BookAlreadyExistException("Book already exists in user's book list")
         }
     }
 
