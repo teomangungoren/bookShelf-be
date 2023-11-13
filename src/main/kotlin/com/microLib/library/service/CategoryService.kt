@@ -25,4 +25,5 @@ class CategoryService(private val categoryRepository: CategoryRepository) {
     fun getAll():List<Category>{
         return categoryRepository.findAll()
     }
+
 }

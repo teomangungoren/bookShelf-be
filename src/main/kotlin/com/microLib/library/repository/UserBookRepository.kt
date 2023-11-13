@@ -9,4 +9,6 @@ interface UserBookRepository: JpaRepository<UserBook, String>{
     fun existsByBookIdAndUsername(bookId: String,username:String): Boolean
 
     fun findByUsername(username: String): List<UserBook>?
+
+    fun findByBookId(bookId: String): List<UserBook>?
 }
