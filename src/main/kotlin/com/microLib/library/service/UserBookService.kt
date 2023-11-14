@@ -8,12 +8,14 @@ import com.microLib.library.exception.BookAlreadyExistException
 import com.microLib.library.exception.BookNotFoundException
 import com.microLib.library.exception.UserNotFoundException
 import com.microLib.library.repository.UserBookRepository
+import com.microLib.library.repository.UserBookViewRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
 class UserBookService(private val userBookRepository: UserBookRepository,
                       private val bookListService: BookListService,
+                      private val userBookViewRepository: UserBookViewRepository
                       ) {
 
     fun create(request:UserBookRequest):UserBookResponse{
@@ -30,6 +32,10 @@ class UserBookService(private val userBookRepository: UserBookRepository,
 
     fun getAllByBookId(bookId:String):List<UserBook>{
         return userBookRepository.findByBookId(bookId)?:throw BookNotFoundException("Book not found with id $bookId")
+    }
+
+    fun getAllUsersByBookId(bookId:String):List<UserBookView>{
+       return userBookViewRepository.getAllUsersByBookId(bookId)?:throw BookNotFoundException("Book not found with id $bookId")
     }
 
 

@@ -1,5 +1,7 @@
 package com.microLib.library.domain
 
+import com.microLib.library.domain.model.User
+import com.microLib.library.domain.model.UserBook
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table

@@ -1,6 +1,6 @@
 CREATE VIEW  user_book_view AS
 SELECT user_book.id as id,
-       users.email as user_name,
+       users.email as username,
        user_book.book_id as book_id,
        book.title as book_name,
        users.name as first_name,

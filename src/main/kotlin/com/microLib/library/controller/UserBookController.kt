@@ -1,5 +1,6 @@
 package com.microLib.library.controller
 
+import com.microLib.library.domain.UserBookView
 import com.microLib.library.domain.model.UserBook
 import com.microLib.library.domain.request.UserBookRequest
 import com.microLib.library.domain.response.UserBookResponse
@@ -29,6 +30,12 @@ class UserBookController(private val userBookService: UserBookService){
     @GetMapping("/all/{username}")
     fun getAllUserBooks(@PathVariable username:String):ResponseEntity<List<UserBook>>{
         return ResponseEntity(userBookService.getAllByUsername(username),HttpStatus.OK)
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/users/{bookId}")
+    fun getAllUsersByBookId(@PathVariable bookId:String):ResponseEntity<List<UserBookView>>{
+        return ResponseEntity(userBookService.getAllUsersByBookId(bookId),HttpStatus.OK)
     }
 
     @PreAuthorize("hasAuthority('USER')")
