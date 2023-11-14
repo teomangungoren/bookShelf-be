@@ -7,6 +7,7 @@ import com.microLib.library.service.UserBookService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -28,6 +29,12 @@ class UserBookController(private val userBookService: UserBookService){
     @GetMapping("/all/{username}")
     fun getAllUserBooks(@PathVariable username:String):ResponseEntity<List<UserBook>>{
         return ResponseEntity(userBookService.getAllByUsername(username),HttpStatus.OK)
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @DeleteMapping()
+    fun deleteUserBook(@RequestBody bookId:String){
+        userBookService.delete(bookId)
     }
 
 

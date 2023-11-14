@@ -1,5 +1,6 @@
 package com.microLib.library.service
 
+import com.microLib.library.domain.UserBookView
 import com.microLib.library.domain.request.CreateUserWishListRequest
 import com.microLib.library.domain.model.UserWishList
 import com.microLib.library.domain.response.UserWishListResponse
@@ -21,16 +22,16 @@ class UserWishListService(
         val book=bookListService.findById(request.bookId)
         userBookService.checkBookExistsByBookId(book.id!!,username)
         checkBookExistsByUser(username,request.bookId)
-        val userWishList=userWishListRepository.save(UserWishList(
-            bookId = book.id,
-            username = username))
-        return UserWishListResponse.convert(userWishList)
+        return UserWishListResponse.convert(userWishListRepository.save(UserWishList("",username,book.id)))
     }
 
     fun getAllByUsername(username:String):List<UserWishList>{
         return userWishListRepository.findByUsername(username)?:throw UserNotFoundException("User not found with username $username")
     }
 
+    fun getAllUsersByBookId(bookId:String):List<UserBookView>{
+        return userBookService.getUsersByBookId(bookId)
+    }
 
     private fun checkBookExistsByUser(username:String,bookId:String){
         if(userWishListRepository.existsByBookIdAndUsername(bookId,username)){

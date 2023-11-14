@@ -11,4 +11,6 @@ interface UserBookRepository: JpaRepository<UserBook, String>{
     fun findByUsername(username: String): List<UserBook>?
 
     fun findByBookId(bookId: String): List<UserBook>?
+
+    fun findByBookIdAndUsername(bookId: String,username: String): UserBook?
 }

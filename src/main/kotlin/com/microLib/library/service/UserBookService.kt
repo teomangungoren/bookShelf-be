@@ -43,5 +43,11 @@ class UserBookService(private val userBookRepository: UserBookRepository,
         }
     }
 
+    fun delete(bookId:String){
+        val username=SecurityContextHolder.getContext().authentication.name
+        val userBook=userBookRepository.findByBookIdAndUsername(bookId,username)?:throw BookNotFoundException("Book not found with id $bookId")
+        userBookRepository.delete(userBook)
+    }
+
 
 }

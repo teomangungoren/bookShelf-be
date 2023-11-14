@@ -12,8 +12,6 @@ class BookListService(
     private val categoryService: CategoryService
 ) {
 
-
-
     fun listBook(): List<BookResponse> {
         return bookRepository
             .findAll()
@@ -28,6 +26,11 @@ class BookListService(
 
     fun findById(id: String): Book {
         return bookRepository.findBookById(id) ?: throw BookNotFoundException("Book not found with $id")
+    }
+
+    private inner class BookSearch{
+
+
     }
 
 }

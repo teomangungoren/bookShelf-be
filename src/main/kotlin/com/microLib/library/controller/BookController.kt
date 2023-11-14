@@ -58,4 +58,7 @@ class BookController(
     fun updateBook(@RequestBody updateBookRequest: UpdateBookRequest): ResponseEntity<BookResponse> {
         return ResponseEntity(bookUpdateService.updateBook(updateBookRequest), HttpStatus.OK)
     }
+    @PreAuthorize("hasAuthority('Admin')")
+
+    fun deleteBook(id:String)=bookSaveService.deleteBook(id)
 }
