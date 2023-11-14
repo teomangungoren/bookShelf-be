@@ -29,9 +29,7 @@ class UserWishListService(
         return userWishListRepository.findByUsername(username)?:throw UserNotFoundException("User not found with username $username")
     }
 
-    fun getAllUsersByBookId(bookId:String):List<UserBookView>{
-        return userBookService.getUsersByBookId(bookId)
-    }
+
 
     private fun checkBookExistsByUser(username:String,bookId:String){
         if(userWishListRepository.existsByBookIdAndUsername(bookId,username)){

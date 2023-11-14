@@ -14,6 +14,6 @@ data class UserBookView(
     val username: String,
     val bookId: String,
     val bookName:String,
-    val userName:String,
+    val firstName:String,
     val surname:String,
 )
