@@ -1,4 +1,4 @@
-package com.microLib.library.domain
+package com.microLib.library.domain.view
 
 import com.microLib.library.domain.model.User
 import com.microLib.library.domain.model.UserBook

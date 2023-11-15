@@ -1,6 +1,6 @@
 package com.microLib.library.controller
 
-import com.microLib.library.domain.UserBookView
+import com.microLib.library.domain.view.UserBookView
 import com.microLib.library.domain.model.UserBook
 import com.microLib.library.domain.request.UserBookRequest
 import com.microLib.library.domain.response.UserBookResponse

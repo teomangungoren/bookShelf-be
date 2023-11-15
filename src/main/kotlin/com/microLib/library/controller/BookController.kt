@@ -32,7 +32,7 @@ class BookController(
     @PostMapping
     fun saveBook(@RequestBody createBookRequest: CreateBookRequest): ResponseEntity<BookResponse> {
         logger.info("BookController.saveBook() called with: createBookRequest = [$createBookRequest]")
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookSaveService.createBook(createBookRequest))
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookSaveService.saveBook(createBookRequest))
     }
 
     @PreAuthorize("hasAuthority('USER')")

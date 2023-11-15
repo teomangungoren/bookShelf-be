@@ -15,5 +15,4 @@ data class UserWishList(
     val id: String? = null,
     val username: String,
     val bookId: String,
-
 )

@@ -1,11 +1,9 @@
 package com.microLib.library.service
 
-import com.microLib.library.domain.UserBookView
 import com.microLib.library.domain.request.CreateUserWishListRequest
 import com.microLib.library.domain.model.UserWishList
 import com.microLib.library.domain.response.UserWishListResponse
 import com.microLib.library.exception.BookAlreadyExistException
-import com.microLib.library.exception.BookNotFoundException
 import com.microLib.library.exception.UserNotFoundException
 import com.microLib.library.repository.UserWishListRepository
 import org.springframework.security.core.context.SecurityContextHolder

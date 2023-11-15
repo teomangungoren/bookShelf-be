@@ -14,7 +14,7 @@ class BookSaveService(
 ) {
 
     @Transactional
-    fun createBook(request: CreateBookRequest): BookResponse {
+    fun saveBook(request: CreateBookRequest): BookResponse {
         val category = categoryService.findById(request.categoryId)
         val book = BookDtoConverter.convertToBookDto(request, category!!)
         if (bookRepository.findBookByIsbn(request.isbn) != null) {

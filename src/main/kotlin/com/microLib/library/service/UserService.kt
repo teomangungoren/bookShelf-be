@@ -70,9 +70,8 @@ class UserService(private val userRepository: UserRepository,
         }
         tokenRepository.saveAll(validToken)
     }
-    fun getById(id: String): UserResponse? {
-        val user = userRepository.findUserById(id)
-        return user?.let { UserResponse.convert(it) } ?: throw UserNotFoundException("User with id $id not found")
+    fun getById(id: String): User {
+        return userRepository.findUserById(id)?:throw UserNotFoundException("User with id $id not found")
     }
 
 }
