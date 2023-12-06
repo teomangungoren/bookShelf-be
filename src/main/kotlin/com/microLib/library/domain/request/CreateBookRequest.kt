@@ -7,5 +7,6 @@ data class CreateBookRequest(
     val pressYear: Int,
     val isbn: String,
     val totalPageNumber: Int,
+    val imageUrl: String,
     val categoryId: String
 )

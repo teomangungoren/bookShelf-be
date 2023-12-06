@@ -2,17 +2,21 @@ package com.microLib.library.controller
 
 import com.microLib.library.domain.model.Category
 import com.microLib.library.domain.request.CreateCategoryRequest
+import com.microLib.library.domain.response.BookResponse
+import com.microLib.library.domain.response.CategoryResponse
 import com.microLib.library.service.CategoryService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1/category")
+@RequestMapping("/api/v1/categories")
+@CrossOrigin("*")
 class CategoryController(private val categoryService: CategoryService) {
 
     @PreAuthorize("hasAuthority('USER')")
@@ -27,8 +31,8 @@ class CategoryController(private val categoryService: CategoryService) {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @RequestMapping("/categories")
-    fun getCategories():ResponseEntity<List<Category>>{
+    @RequestMapping("/all")
+    fun getCategories():ResponseEntity<List<CategoryResponse>>{
         return ResponseEntity(categoryService.getAll(),HttpStatus.OK)
     }
 

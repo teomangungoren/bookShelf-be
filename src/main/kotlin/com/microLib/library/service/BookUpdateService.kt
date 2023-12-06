@@ -29,7 +29,6 @@ class BookUpdateService(
             book.bookYear = bookYear ?: book.bookYear
             book.pressYear = pressYear ?: book.pressYear
             book.totalPageNumber = totalPageNumber ?: book.totalPageNumber
-            book.count = count ?: book.count
         }
     }
 }

@@ -21,7 +21,9 @@ data class Book(
     var pressYear: Int,
     val isbn: String,
     var totalPageNumber: Int,
-    var count: Int = 1,
+    var imageUrl:String,
+    var totalOwner: Int = 1,
+    var rating: Float = 0f,
     @ManyToOne
     @JoinColumn(name = "category_id")
     var category: Category

@@ -1,10 +1,6 @@
 package com.microLib.library.domain.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
-import jakarta.persistence.OneToMany
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
 
 @Entity
@@ -15,6 +11,6 @@ data class Category(
     @Id
     val id: String? = null,
     val name: String,
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     val books: List<Book> ?= emptyList()
 )

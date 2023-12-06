@@ -22,7 +22,8 @@ class UserBookService(private val userBookRepository: UserBookRepository,
         val username=SecurityContextHolder.getContext().authentication.name
         val book=bookListService.findById(request.bookId)
         checkBookExistsByBookId(book.id!!,username)
-        val userBook=userBookRepository.save(UserBook("",username,book.id))
+        val userBook=userBookRepository.save(UserBook("",username,book.id,request.rating))
+        book.rating= book.rating.plus(request.rating)
         return UserBookResponse.convert(userBook)
     }
 

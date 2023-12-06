@@ -9,7 +9,7 @@ data class BookResponse(
     val pressYear: Int,
     val isbn: String,
     val totalPageNumber: Int,
-    val count: Int,
+    val imageUrl: String,
     val categoryName: String
 ) {
     companion object {
@@ -22,7 +22,7 @@ data class BookResponse(
                 pressYear = from.pressYear,
                 isbn = from.isbn,
                 totalPageNumber = from.totalPageNumber,
-                count = from.count,
+                imageUrl = from.imageUrl,
                 categoryName = from.category.name
             )
         }

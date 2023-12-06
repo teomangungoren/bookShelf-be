@@ -15,4 +15,5 @@ data class UserBook(
     val id: String? = null,
     val username: String,
     val bookId: String,
+    val rating: Int
 )
