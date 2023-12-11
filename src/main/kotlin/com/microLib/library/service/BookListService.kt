@@ -28,6 +28,13 @@ class BookListService(
         return bookRepository.findBookById(id) ?: throw BookNotFoundException("Book not found with $id")
     }
 
+    fun getBooksByCategoryId(categoryId: String): List<BookResponse>{
+        return bookRepository
+            .findAllBooksByCategoryId(categoryId)
+            .map { BookResponse.convert(it) }
+            .toList()
+    }
+
     private inner class BookSearch{
 
 

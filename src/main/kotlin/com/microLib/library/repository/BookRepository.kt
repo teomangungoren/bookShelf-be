@@ -9,6 +9,8 @@ interface BookRepository : JpaRepository<Book, String> {
 
     fun findBookById(id: String): Book?
 
+    fun findAllBooksByCategoryId(id:String) : List<Book>
+
 
 
 

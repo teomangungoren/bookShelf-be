@@ -1,5 +1,6 @@
 package com.microLib.library.domain.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
@@ -23,7 +24,8 @@ data class Book(
     var totalPageNumber: Int,
     var imageUrl:String,
     var totalOwner: Int = 1,
-    var rating: Float = 0f,
+    @JsonIgnore
+    var totalRating: Float = 0f,
     @ManyToOne
     @JoinColumn(name = "category_id")
     var category: Category

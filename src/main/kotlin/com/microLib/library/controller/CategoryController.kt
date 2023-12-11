@@ -24,6 +24,7 @@ class CategoryController(private val categoryService: CategoryService) {
     fun createCategory(@RequestBody createCategoryRequest: CreateCategoryRequest):ResponseEntity<*> {
        return ResponseEntity(categoryService.create(createCategoryRequest),HttpStatus.CREATED)
     }
+
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("/{id}")
     fun getCategoryById(@PathVariable id:String):ResponseEntity<Category>{

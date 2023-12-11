@@ -23,4 +23,14 @@ class BookSaveService(
     fun deleteBook(id: String) {
         bookRepository.deleteById(id)
     }
+
+    fun calculateRating(bookId: String, rating: Int) {
+        val book = bookRepository.findById(bookId).get()
+        book.totalOwner++
+        book.apply {
+            totalRating= (((totalRating * totalOwner + rating) / (totalOwner+1)) * 1.0).toFloat()
+            totalOwner++
+        }
+        bookRepository.save(book)
+    }
 }

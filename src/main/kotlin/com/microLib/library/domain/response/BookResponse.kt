@@ -9,6 +9,7 @@ data class BookResponse(
     val pressYear: Int,
     val isbn: String,
     val totalPageNumber: Int,
+    var totalRating: Float,
     val imageUrl: String,
     val categoryName: String
 ) {
@@ -22,6 +23,7 @@ data class BookResponse(
                 pressYear = from.pressYear,
                 isbn = from.isbn,
                 totalPageNumber = from.totalPageNumber,
+                totalRating = from.totalRating,
                 imageUrl = from.imageUrl,
                 categoryName = from.category.name
             )

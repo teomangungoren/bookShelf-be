@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserBookService(private val userBookRepository: UserBookRepository,
                       private val bookListService: BookListService,
+                      private val bookSaveService: BookSaveService,
                       private val userBookViewRepository: UserBookViewRepository
                       ) {
 
@@ -23,7 +24,7 @@ class UserBookService(private val userBookRepository: UserBookRepository,
         val book=bookListService.findById(request.bookId)
         checkBookExistsByBookId(book.id!!,username)
         val userBook=userBookRepository.save(UserBook("",username,book.id,request.rating))
-        book.rating= book.rating.plus(request.rating)
+        bookSaveService.calculateRating(book.id,request.rating)
         return UserBookResponse.convert(userBook)
     }
 
@@ -39,6 +40,11 @@ class UserBookService(private val userBookRepository: UserBookRepository,
        return userBookViewRepository.getAllUsersByBookId(bookId)?:throw BookNotFoundException("Book not found with id $bookId")
     }
 
+    fun delete(bookId:String){
+        val username=SecurityContextHolder.getContext().authentication.name
+        val userBook=userBookRepository.findByBookIdAndUsername(bookId,username)?:throw BookNotFoundException("Book not found with id $bookId")
+        userBookRepository.delete(userBook)
+    }
 
 
     fun checkBookExistsByBookId(bookId:String,username:String){
@@ -47,11 +53,7 @@ class UserBookService(private val userBookRepository: UserBookRepository,
         }
     }
 
-    fun delete(bookId:String){
-        val username=SecurityContextHolder.getContext().authentication.name
-        val userBook=userBookRepository.findByBookIdAndUsername(bookId,username)?:throw BookNotFoundException("Book not found with id $bookId")
-        userBookRepository.delete(userBook)
-    }
+
 
 
 }

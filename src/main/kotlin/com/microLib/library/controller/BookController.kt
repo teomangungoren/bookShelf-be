@@ -36,11 +36,16 @@ class BookController(
         return ResponseEntity(bookListService.listBook(), HttpStatus.OK)
     }
 
-
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/book/isbn/{isbn}")
     fun getBookByIsbn(@PathVariable isbn: String): ResponseEntity<BookResponse> {
         return ResponseEntity(bookListService.findByIsbn(isbn), HttpStatus.OK)
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/book/category/{categoryId}")
+    fun getBooksByCategoryId(@PathVariable categoryId: String): ResponseEntity<List<BookResponse>> {
+        return ResponseEntity(bookListService.getBooksByCategoryId(categoryId), HttpStatus.OK)
     }
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/book/id/{id}")
@@ -54,6 +59,5 @@ class BookController(
         return ResponseEntity(bookUpdateService.updateBook(updateBookRequest), HttpStatus.OK)
     }
     @PreAuthorize("hasAuthority('Admin')")
-
     fun deleteBook(id:String)=bookSaveService.deleteBook(id)
 }

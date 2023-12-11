@@ -74,4 +74,10 @@ class UserService(private val userRepository: UserRepository,
         return userRepository.findUserById(id)?:throw UserNotFoundException("User with id $id not found")
     }
 
+    fun getByUsername(username: String?): UserResponse? {
+        val currentUser=SecurityContextHolder.getContext().authentication.name
+        return UserResponse.convert(userRepository.findByEmail(username?:currentUser)
+            ?:throw UserNotFoundException("User with username $username not found"))
+    }
+
 }

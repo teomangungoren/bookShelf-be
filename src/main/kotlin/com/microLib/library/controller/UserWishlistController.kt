@@ -22,7 +22,6 @@ class UserWishlistController(private val userWishListService: UserWishListServic
     fun createUserWishList(@RequestBody request:CreateUserWishListRequest):ResponseEntity<UserWishListResponse>{
      return ResponseEntity(userWishListService.create(request),HttpStatus.CREATED)
     }
-
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{username}")
     fun getAllByUsername(@PathVariable username:String):ResponseEntity<List<UserWishList>>{
