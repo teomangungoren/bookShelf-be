@@ -49,8 +49,8 @@ class BookController(
     }
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/book/id/{id}")
-    fun getBookById(@PathVariable id: String): ResponseEntity<Book> {
-        return ResponseEntity(bookListService.findById(id), HttpStatus.OK)
+    fun getBookById(@PathVariable id: String): ResponseEntity<BookResponse> {
+        return ResponseEntity(BookResponse.convert(bookListService.findById(id)), HttpStatus.OK)
     }
 
     @PreAuthorize("hasAuthority('USER')")
