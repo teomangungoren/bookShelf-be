@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -27,8 +28,8 @@ class UserBookController(private val userBookService: UserBookService){
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/all/{username}")
-    fun getAllUserBooks(@PathVariable username:String):ResponseEntity<List<UserBook>>{
+    @GetMapping("/all/books")
+    fun getAllUserBooks(@RequestParam username: String?):ResponseEntity<List<UserBookView>>{
         return ResponseEntity(userBookService.getAllByUsername(username),HttpStatus.OK)
     }
 

@@ -16,6 +16,7 @@ class BookDtoConverter {
                     bookYear = bookYear,
                     pressYear = pressYear,
                     isbn = isbn,
+                    description = description,
                     totalPageNumber = totalPageNumber,
                     imageUrl = imageUrl,
                     category = category

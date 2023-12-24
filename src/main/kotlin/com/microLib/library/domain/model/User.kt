@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
+import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.GenericGenerator
@@ -29,9 +30,10 @@ import java.time.LocalDateTime
     var password: String,
     @Enumerated(EnumType.STRING)
     var role: Role = Role.USER,
+    var profileImage: ByteArray? = null,
     @CreationTimestamp
     val creationTime: LocalDateTime = LocalDateTime.now(),
-     @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     val tokens: List<Token> = emptyList()
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out SimpleGrantedAuthority> {

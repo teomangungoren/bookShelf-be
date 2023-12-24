@@ -22,7 +22,6 @@ class CategoryService(private val categoryRepository: CategoryRepository) {
     fun create(createCategoryRequest: CreateCategoryRequest): Category {
         return categoryRepository.save(Category(name = createCategoryRequest.name))
     }
-
     fun getAll():List<CategoryResponse>{
         return  categoryRepository
             .findAll()

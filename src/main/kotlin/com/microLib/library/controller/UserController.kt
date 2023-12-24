@@ -1,23 +1,27 @@
 package com.microLib.library.controller
 
+import com.microLib.library.domain.model.User
 import com.microLib.library.domain.request.ChangePasswordRequest
 import com.microLib.library.domain.request.RegisterUserRequest
 import com.microLib.library.domain.request.SignInRequest
 import com.microLib.library.domain.response.TokenResponse
 import com.microLib.library.domain.response.UserResponse
+import com.microLib.library.extension.General
 import com.microLib.library.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/api/v1/users")
 @CrossOrigin("*")
-class UserController(private val userService: UserService) {
+class UserController(private val userService: UserService) : General(){
 
     @PostMapping("/register")
     fun register(@RequestBody registerUserRequest: RegisterUserRequest):ResponseEntity<UserResponse>{
-        return ResponseEntity(userService.registerUser(registerUserRequest),HttpStatus.CREATED)
+        return  ResponseEntity(userService.registerUser(registerUserRequest),HttpStatus.CREATED)
     }
 
     @PostMapping("/authenticate")
@@ -34,6 +38,7 @@ class UserController(private val userService: UserService) {
     fun changePassword(@RequestBody changePasswordRequest: ChangePasswordRequest):ResponseEntity<*>{
         return ResponseEntity(userService.changePassword(changePasswordRequest),HttpStatus.OK)
     }
+
 
 
 

@@ -5,6 +5,7 @@ data class CreateBookRequest(
     val author: String,
     val bookYear: Int,
     val pressYear: Int,
+    val description: String,
     val isbn: String,
     val totalPageNumber: Int,
     val imageUrl: String,

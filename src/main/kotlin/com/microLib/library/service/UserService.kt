@@ -17,6 +17,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
+import java.nio.file.Paths
 import java.util.Date
 
 @Service
@@ -24,7 +26,9 @@ class UserService(private val userRepository: UserRepository,
                   private val tokenService: TokenService,
                   private val tokenRepository: TokenRepository,
                   private val authenticationManager: AuthenticationManager,
-                  private val passwordEncoder: PasswordEncoder) {
+                  private val passwordEncoder: PasswordEncoder,
+                  private val mailService: MailService
+    ) {
 
 
     fun registerUser(request: RegisterUserRequest): UserResponse {
@@ -32,6 +36,7 @@ class UserService(private val userRepository: UserRepository,
                 throw UserAlreadyExistException("User already exist")
         }
         val user=userRepository.save(RegisterUserRequest.toUser(request,passwordEncoder ))
+        mailService.sendMail(request.email)
         return UserResponse.convert(user)
     }
 
@@ -70,14 +75,18 @@ class UserService(private val userRepository: UserRepository,
         }
         tokenRepository.saveAll(validToken)
     }
-    fun getById(id: String): User {
-        return userRepository.findUserById(id)?:throw UserNotFoundException("User with id $id not found")
+    fun findUserByEmail(email:String): User? {
+        return userRepository.findByEmail(email)
     }
 
     fun getByUsername(username: String?): UserResponse? {
         val currentUser=SecurityContextHolder.getContext().authentication.name
-        return UserResponse.convert(userRepository.findByEmail(username?:currentUser)
-            ?:throw UserNotFoundException("User with username $username not found"))
+        val user =userRepository.findByEmail(username?:currentUser)
+        return user?.let { UserResponse.convert(it) }
+    }
+
+    fun getById(id:String):User{
+        return userRepository.findUserById(id)?:throw UserNotFoundException("User not found with id $id")
     }
 
 }

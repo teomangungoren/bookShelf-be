@@ -7,4 +7,6 @@ interface UserBookViewRepository:JpaRepository<UserBookView,String>{
 
     fun getAllUsersByBookId(bookId:String):List<UserBookView>?
 
+    fun getAllBooksByUsername(username:String):List<UserBookView>?
+
 }

@@ -17,4 +17,20 @@ spring:
     user: postgres
     baseline-description: "init"
     baseline-version: 0
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: apolar1453@gmail.com
+    password: rchipqjztneykzit
+    properties:
+      mail:
+        smtp:
+          auth:true
+        starttls:
+          enable: true
+          required: true
+
+
+
+
 

@@ -25,7 +25,17 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.flywaydb:flyway-core")
     runtimeOnly("org.postgresql:postgresql")
+    implementation("commons-fileupload:commons-fileupload:1.5")
+    implementation("commons-io:commons-io:2.5")
 
+    //flux
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+    //mail
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+
+
+    //web
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

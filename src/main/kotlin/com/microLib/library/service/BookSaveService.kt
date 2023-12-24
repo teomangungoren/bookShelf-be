@@ -33,4 +33,20 @@ class BookSaveService(
         }
         bookRepository.save(book)
     }
+
+    fun increaseTotalOwner(bookId: String) {
+        val book = bookRepository.findBookById(bookId)?.let {
+            it.totalOwner++
+            bookRepository.save(it)
+        }
+    }
+
+    fun increaseTotalWishlistOwner(bookId: String) {
+        val book = bookRepository.findBookById(bookId)?.let {
+            it.totalWishlistOwner = it.totalWishlistOwner!! + 1
+            bookRepository.save(it)
+        }
+    }
+
+
 }

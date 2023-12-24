@@ -2,6 +2,7 @@ package com.microLib.library.domain.request
 
 import com.microLib.library.domain.model.User
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.multipart.MultipartFile
 
 data class RegisterUserRequest(
     val name: String,

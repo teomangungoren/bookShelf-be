@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserWishListViewRepository:JpaRepository<UserWishListView,String> {
 
-    fun getAllUsersByBookId(bookId:String):List<UserBookView>?
+    fun getAllUsersByBookId(bookId:String):List<UserWishListView>?
+
+    fun getAllBooksByUsername(username:String):List<UserWishListView>?
 
 }

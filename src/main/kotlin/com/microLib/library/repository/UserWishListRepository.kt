@@ -7,7 +7,8 @@ interface UserWishListRepository: JpaRepository<UserWishList, String> {
 
     fun existsByBookIdAndUsername(bookId: String,username:String): Boolean
 
-    fun findByUsername(username: String): List<UserWishList>?
+    fun findByBookIdAndUsername(bookId: String,username:String): UserWishList?
+
 
 
 }

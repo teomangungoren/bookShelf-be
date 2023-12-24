@@ -29,7 +29,6 @@ class BookController(
         logger.info("BookController.saveBook() called with: createBookRequest = [$createBookRequest]")
         return ResponseEntity.status(HttpStatus.CREATED).body(bookSaveService.saveBook(createBookRequest))
     }
-
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     fun getBookList(): ResponseEntity<List<BookResponse>> {
@@ -47,6 +46,7 @@ class BookController(
     fun getBooksByCategoryId(@PathVariable categoryId: String): ResponseEntity<List<BookResponse>> {
         return ResponseEntity(bookListService.getBooksByCategoryId(categoryId), HttpStatus.OK)
     }
+
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/book/id/{id}")
     fun getBookById(@PathVariable id: String): ResponseEntity<BookResponse> {
@@ -58,6 +58,21 @@ class BookController(
     fun updateBook(@RequestBody updateBookRequest: UpdateBookRequest): ResponseEntity<BookResponse> {
         return ResponseEntity(bookUpdateService.updateBook(updateBookRequest), HttpStatus.OK)
     }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/search")
+    fun search(@RequestParam search: String?): ResponseEntity<List<BookResponse>> {
+        return ResponseEntity(bookListService.search(search), HttpStatus.OK)
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/search2")
+    fun searchBook(@RequestParam search:String):ResponseEntity<List<BookResponse>>{
+        return ResponseEntity(bookListService.searchBook(search),HttpStatus.OK)
+    }
+
     @PreAuthorize("hasAuthority('Admin')")
     fun deleteBook(id:String)=bookSaveService.deleteBook(id)
+
+
 }
