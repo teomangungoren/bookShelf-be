@@ -25,7 +25,7 @@ class UserWishListService(
         val book=bookListService.findById(request.bookId)
         userBookService.checkBookExistsByBookId(book.id!!,username)
         checkBookExistsByUser(username,request.bookId)
-        val userWishlist=userWishListRepository.save(UserWishList("",username,book.id))
+        val userWishlist=userWishListRepository.save(UserWishList(username,book.id))
         bookSaveService.increaseTotalWishlistOwner(book.id)
         return UserWishListResponse.convert(userWishlist)
     }
@@ -39,9 +39,9 @@ class UserWishListService(
         return userWishListViewRepository.getAllBooksByUsername(user)?:throw UserNotFoundException("User not found with username $username")
     }
 
-    fun delete(bookId:String,username:String){
+    fun delete(bookId:String){
         val user=SecurityContextHolder.getContext().authentication.name
-        val userWishList=userWishListRepository.findByBookIdAndUsername(bookId,username)?:throw BookNotFoundException("Book not found with id $bookId")
+        val userWishList=userWishListRepository.findByBookIdAndUsername(bookId,user)?:throw BookNotFoundException("Book not found with id $bookId")
         userWishListRepository.delete(userWishList)
     }
 

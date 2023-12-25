@@ -14,7 +14,7 @@ class ImageService(private val imageRepository: ImageRepository,
 
     fun uploadImage(file:MultipartFile){
        userRepository.findByEmail(SecurityContextHolder.getContext().authentication.name)?.let {
-           val image=imageRepository.save(Image("",file.originalFilename!!,file.contentType!!,file.bytes,it.email))
+           val image=imageRepository.save(Image(file.originalFilename!!,file.contentType!!,file.bytes,it.email))
            it.profileImage=image.imageData
               userRepository.save(it)
        }

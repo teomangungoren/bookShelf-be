@@ -6,6 +6,5 @@ import com.microLib.library.repository.MessageRepository
 class MessageService(private val messageRepository: MessageRepository) {
 
     fun sendMessage(request:CreateMessageRequest){
-
     }
 }

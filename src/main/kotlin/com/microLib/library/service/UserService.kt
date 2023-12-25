@@ -17,8 +17,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import org.springframework.web.multipart.MultipartFile
-import java.nio.file.Paths
 import java.util.Date
 
 @Service
@@ -60,7 +58,7 @@ class UserService(private val userRepository: UserRepository,
        val jwtToken= tokenService.generateToken(user)
         val expirationDate=tokenService.extractExpiration(jwtToken)
         revokeAllUserTokens(user)
-        tokenRepository.save(Token("",jwtToken,TokenType.BEARER,false,false,user))
+        tokenRepository.save(Token(jwtToken,TokenType.BEARER,false,false,user))
         return TokenResponse(jwtToken,Date(System.currentTimeMillis()),expirationDate)
     }
 

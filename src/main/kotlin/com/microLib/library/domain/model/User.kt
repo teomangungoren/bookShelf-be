@@ -4,13 +4,9 @@ import com.microLib.library.domain.enum.Role
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
-import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.GenericGenerator
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDateTime
@@ -18,10 +14,6 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "users")
  data class User(
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Id
-    val id: String? = null,
     val name: String,
     val surname: String,
     var email: String,
@@ -35,7 +27,8 @@ import java.time.LocalDateTime
     val creationTime: LocalDateTime = LocalDateTime.now(),
     @OneToMany(mappedBy = "user")
     val tokens: List<Token> = emptyList()
-) : UserDetails {
+) : UserDetails, BaseEntity() {
+
     override fun getAuthorities(): MutableCollection<out SimpleGrantedAuthority> {
         return mutableListOf(SimpleGrantedAuthority(role.name))
     }

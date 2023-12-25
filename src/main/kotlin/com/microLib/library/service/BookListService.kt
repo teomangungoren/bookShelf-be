@@ -5,7 +5,6 @@ import com.microLib.library.domain.response.BookResponse
 import com.microLib.library.exception.BookNotFoundException
 import com.microLib.library.repository.BookRepository
 import com.microLib.library.repository.BookSpecification
-import jakarta.persistence.EntityManager
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service
 class BookListService(
     private val bookRepository: BookRepository,
 ) {
-
 
     fun listBook(): List<BookResponse> {
         return bookRepository

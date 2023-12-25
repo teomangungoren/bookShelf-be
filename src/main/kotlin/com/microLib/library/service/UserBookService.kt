@@ -25,7 +25,7 @@ class UserBookService(private val userBookRepository: UserBookRepository,
         val book=bookListService.findById(request.bookId)
         checkBookExistsByBookId(book.id!!,username)
         isBookExistsInWishlist(book.id)
-        val userBook= userBookRepository.save(UserBook("",username,book.id,request.rating))
+        val userBook= userBookRepository.save(UserBook(username,book.id,request.rating))
         bookSaveService.increaseTotalOwner(book.id)
         bookSaveService.calculateRating(book.id,request.rating)
         return UserBookResponse.convert(userBook)

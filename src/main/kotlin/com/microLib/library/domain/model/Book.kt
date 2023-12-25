@@ -3,22 +3,15 @@ package com.microLib.library.domain.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicUpdate
-import org.hibernate.annotations.GenericGenerator
 
 @Entity
 @Table(name = "book")
 @DynamicUpdate
 data class Book(
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Id
-    val id: String? = null,
     var title: String,
     var author: String,
     var bookYear: Int,
@@ -35,4 +28,4 @@ data class Book(
     @JoinColumn(name = "category_id")
     @JsonIgnore
     var category: Category
-)
+):BaseEntity()
