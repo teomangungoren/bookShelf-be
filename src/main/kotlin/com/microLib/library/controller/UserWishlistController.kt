@@ -32,8 +32,8 @@ class UserWishlistController(private val userWishListService: UserWishListServic
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/")
-    fun getAllUsersByBookId(@RequestParam bookId:String):ResponseEntity<List<UserWishListView>>{
+    @GetMapping("/{bookId}")
+    fun getAllUsersByBookId(@PathVariable bookId:String):ResponseEntity<List<UserWishListView>>{
         return ResponseEntity(userWishListService.getAllByBookId(bookId),HttpStatus.OK)
     }
 
