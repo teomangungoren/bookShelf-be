@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service
 @Service
 class LogoutService(private val tokenRepository: TokenRepository): LogoutHandler {
 
-
     override fun logout(request: HttpServletRequest?, response: HttpServletResponse?, authentication: Authentication?) {
 
         val authHeader = request?.getHeader("Authorization")

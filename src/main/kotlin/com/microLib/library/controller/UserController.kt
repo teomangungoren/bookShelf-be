@@ -1,6 +1,5 @@
 package com.microLib.library.controller
 
-import com.microLib.library.domain.model.User
 import com.microLib.library.domain.request.ChangePasswordRequest
 import com.microLib.library.domain.request.RegisterUserRequest
 import com.microLib.library.domain.request.SignInRequest
@@ -10,9 +9,7 @@ import com.microLib.library.extension.General
 import com.microLib.library.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -38,6 +35,7 @@ class UserController(private val userService: UserService) : General(){
     fun changePassword(@RequestBody changePasswordRequest: ChangePasswordRequest):ResponseEntity<*>{
         return ResponseEntity(userService.changePassword(changePasswordRequest),HttpStatus.OK)
     }
+
 
 
 

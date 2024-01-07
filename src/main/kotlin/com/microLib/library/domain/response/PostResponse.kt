@@ -16,7 +16,7 @@ data class PostResponse(
                 postId = from.id!!,
                 postTitle = from.postTitle,
                 description = from.description,
-                username = from.ownerUsername.substringBefore("@"),
+                username = from.ownerUsername,
                 likes = from.likes
             )
         }

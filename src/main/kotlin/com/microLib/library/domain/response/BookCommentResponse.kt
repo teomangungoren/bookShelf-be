@@ -10,7 +10,7 @@ data class BookCommentResponse(
     companion object {
         fun convert(from: BookComment): BookCommentResponse {
             return BookCommentResponse(
-                username = from.username.substringBefore("@"),
+                username = from.username,
                 comment = from.comment,
             )
         }

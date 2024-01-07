@@ -13,7 +13,7 @@ data class PostCommentResponse(
         fun convert(from:PostComment):PostCommentResponse{
             return PostCommentResponse(
                 id = from.id!!,
-                username = from.username.substringBefore("@"),
+                username = from.username,
                 comment = from.comment,
                 createdAt = from.createdAt!!
             )

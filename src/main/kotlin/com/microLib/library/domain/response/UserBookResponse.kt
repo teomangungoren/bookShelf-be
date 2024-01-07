@@ -10,7 +10,7 @@ data class UserBookResponse(
     companion object{
         fun convert(from:UserBook)=UserBookResponse(
             bookId = from.bookId,
-            username = from.username.substringBefore("@")
+            username = from.username
         )
     }
 }

@@ -41,6 +41,10 @@ class PostService(private val postRepository: PostRepository) {
         }
     }
 
+    fun getAll():List<Post>{
+        return postRepository.findAll()
+    }
+
     fun findById(id:String):Post{
         return postRepository.findById(id).orElseThrow { Exception("Post not found") }
     }

@@ -10,8 +10,11 @@ import com.microLib.library.domain.response.TokenResponse
 import com.microLib.library.domain.response.UserResponse
 import com.microLib.library.exception.UserAlreadyExistException
 import com.microLib.library.exception.UserNotFoundException
+import com.microLib.library.pagination.PaginationResponse
 import com.microLib.library.repository.TokenRepository
 import com.microLib.library.repository.UserRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -59,7 +62,12 @@ class UserService(private val userRepository: UserRepository,
         val expirationDate=tokenService.extractExpiration(jwtToken)
         revokeAllUserTokens(user)
         tokenRepository.save(Token(jwtToken,TokenType.BEARER,false,false,user))
-        return TokenResponse(jwtToken,Date(System.currentTimeMillis()),expirationDate)
+        return TokenResponse(jwtToken,request.email,expirationDate)
+    }
+
+    fun signOut(){
+        val user=userRepository.findByEmail(SecurityContextHolder.getContext().authentication.name)?:throw UserNotFoundException("User not found")
+        revokeAllUserTokens(user)
     }
 
     private fun revokeAllUserTokens(user:User){
@@ -73,6 +81,8 @@ class UserService(private val userRepository: UserRepository,
         }
         tokenRepository.saveAll(validToken)
     }
+
+
     fun findUserByEmail(email:String): User? {
         return userRepository.findByEmail(email)
     }
@@ -86,5 +96,6 @@ class UserService(private val userRepository: UserRepository,
     fun getById(id:String):User{
         return userRepository.findUserById(id)?:throw UserNotFoundException("User not found with id $id")
     }
+
 
 }

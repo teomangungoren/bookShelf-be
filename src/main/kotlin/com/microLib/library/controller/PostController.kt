@@ -7,6 +7,7 @@ import com.microLib.library.service.PostService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/posts")
+@CrossOrigin("*")
 class PostController(private val postService: PostService){
 
     @PreAuthorize("hasAuthority('USER')")
@@ -42,6 +44,12 @@ class PostController(private val postService: PostService){
     @GetMapping("/{postId}")
     fun getPostById(@PathVariable postId:String):ResponseEntity<PostResponse>{
         return ResponseEntity(PostResponse.convert(postService.findById(postId)),HttpStatus.OK)
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/all")
+    fun getAll():ResponseEntity<List<PostResponse>>{
+        return ResponseEntity(postService.getAll().map { PostResponse.convert(it) },HttpStatus.OK)
     }
 
 

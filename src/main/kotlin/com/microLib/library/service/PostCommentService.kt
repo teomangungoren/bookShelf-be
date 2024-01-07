@@ -2,7 +2,12 @@ package com.microLib.library.service
 
 import com.microLib.library.domain.model.PostComment
 import com.microLib.library.domain.request.CreatePostCommentRequest
+import com.microLib.library.domain.response.PostCommentResponse
+import com.microLib.library.pagination.PaginationRequest
+import com.microLib.library.pagination.PaginationResponse
 import com.microLib.library.repository.PostCommentRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
@@ -35,9 +40,6 @@ class PostCommentService(private val postCommentRepository: PostCommentRepositor
         return postCommentRepository.findById(id).orElseThrow { Exception("Post not found") }
     }
 
-
-
-
     fun increaseLikeCount(postId:String){
         postCommentRepository.findByIdOrNull(postId)?.let{
             it.likes++
@@ -50,6 +52,18 @@ class PostCommentService(private val postCommentRepository: PostCommentRepositor
             it.likes--
             postCommentRepository.save(it)
         }
+    }
+
+    fun getCommentsByPostIdWithPagination(postId:String,request:PaginationRequest):PaginationResponse<PostCommentResponse>{
+        val pageRequest=PageRequest.of(request.page-1,request.size)
+        val page:Page<PostComment> = postCommentRepository.findPostCommentsByPostId(postId,pageRequest)
+
+        return PaginationResponse(
+            page.content.map { PostCommentResponse(it.id!!,it.username,it.comment,Instant.now()) },
+            page.totalPages,
+            page.totalElements,
+            page.number+1
+        )
     }
 
 

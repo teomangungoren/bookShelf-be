@@ -5,7 +5,7 @@ import java.util.Date
 
 data class TokenResponse(
     val token: String,
-    val nowTime:Date,
+    val username:String,
     val expirationDate: Date
 ) {
 }

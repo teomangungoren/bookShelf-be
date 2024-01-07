@@ -1,7 +1,10 @@
 package com.microLib.library.controller
 
+import com.microLib.library.domain.model.PostComment
 import com.microLib.library.domain.request.CreatePostCommentRequest
 import com.microLib.library.domain.response.PostCommentResponse
+import com.microLib.library.pagination.PaginationRequest
+import com.microLib.library.pagination.PaginationResponse
 import com.microLib.library.service.PostCommentService
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -22,6 +25,7 @@ class PostCommentController(private val postCommentService: PostCommentService) 
         return PostCommentResponse.convert(postCommentService.create(request))
     }
 
+
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{postId}")
     fun getCommentsByPostId(@PathVariable postId:String):List<PostCommentResponse>{
@@ -35,6 +39,15 @@ class PostCommentController(private val postCommentService: PostCommentService) 
         postCommentService.deleteComment(postId)
     }
 
+    /*
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/{postId}")
+    fun getAll(@PathVariable postId:String,@RequestBody request: PaginationRequest): PaginationResponse<PostCommentResponse> {
+        return postCommentService.getCommentsByPostIdWithPagination(postId,request)
+    }
+
+
+     */
 
 
 }
