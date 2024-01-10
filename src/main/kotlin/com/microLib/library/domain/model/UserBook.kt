@@ -8,5 +8,4 @@ import jakarta.persistence.Table
 data class UserBook(
     val username: String,
     val bookId: String,
-    val rating: Int
 ): BaseEntity()

@@ -25,9 +25,8 @@ class UserBookService(private val userBookRepository: UserBookRepository,
         val book=bookListService.findById(request.bookId)
         checkBookExistsByBookId(book.id!!,username)
         isBookExistsInWishlist(book.id)
-        val userBook= userBookRepository.save(UserBook(username,book.id,request.rating))
+        val userBook= userBookRepository.save(UserBook(username,book.id))
         bookSaveService.increaseTotalOwner(book.id)
-        bookSaveService.calculateRating(book.id,request.rating)
         return UserBookResponse.convert(userBook)
     }
 
@@ -38,6 +37,10 @@ class UserBookService(private val userBookRepository: UserBookRepository,
 
     fun getAllUsersByBookId(bookId:String):List<UserBookView>{
        return userBookViewRepository.getAllUsersByBookId(bookId)?:throw BookNotFoundException("Book not found with id $bookId")
+    }
+
+    fun getAllBooksByOwnerShip():List<String>{
+        return userBookRepository.getAllBooksOrderByOwnerShipDesc()
     }
 
     fun delete(bookId:String){

@@ -16,7 +16,7 @@ class UserLikedPostService(private val userLikedPostRepository: UserLikedPostRep
     fun create(request:CreateUserLikedPostRequest){
        val username= SecurityContextHolder.getContext().authentication.name
         with(request){
-          val userLikedPost=UserLikedPost(postId,username, Instant.now(), Instant.now())
+          val userLikedPost=UserLikedPost(username,postId, Instant.now(), Instant.now())
             userLikedPostRepository.save(userLikedPost)
         }
         postService.findById(request.postId)?.let {

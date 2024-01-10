@@ -15,6 +15,7 @@ class UserLikedBookCommentService(
 
     @Transactional
     fun create(request: CreateUserLikedBookCommentRequest){
+        try{
         val username= SecurityContextHolder.getContext().authentication.name
         with(request){
             val userLikedComment= UserLikedBookComment(bookCommentId,username, Instant.now(), Instant.now())
@@ -22,14 +23,16 @@ class UserLikedBookCommentService(
         }
         bookCommentService.findById(request.bookCommentId)?.let {
              bookCommentService.increaseLikeCount(it.id!!)
+        }}catch (e:Exception){
+            println(e)
         }
     }
 
-    fun delete(commentId:String){
+    fun delete(request: CreateUserLikedBookCommentRequest){
         val username= SecurityContextHolder.getContext().authentication.name
-        userLikedBookCommentRepository.findUserLikedCommentByIdAndUsername(commentId,username)?.let {
+        userLikedBookCommentRepository.findUserLikedCommentByIdAndUsername(request.bookCommentId,username)?.let {
             userLikedBookCommentRepository.delete(it)
-            bookCommentService.decreaseLikeCount(commentId)
+            bookCommentService.decreaseLikeCount(it.bookCommentId)
         }
     }
 

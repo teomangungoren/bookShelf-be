@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/search")
-@CrossOrigin("*")
 class SearchController(private val searchService: SearchService){
 
     @GetMapping

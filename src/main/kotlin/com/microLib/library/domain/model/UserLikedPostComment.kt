@@ -7,8 +7,8 @@ import org.springframework.data.annotation.LastModifiedDate
 import java.time.Instant
 
 @Entity
-@Table(name="user_liked_comment")
-data class UserLikedComment(
+@Table(name="user_liked_post_comment")
+data class UserLikedPostComment(
     val postCommentId:String,
     val username:String,
     @CreatedDate var createdAt: Instant? = null,

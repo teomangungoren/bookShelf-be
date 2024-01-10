@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/bookComments")
-@CrossOrigin("*")
 class BookCommentController(private val bookCommentService: BookCommentService) {
 
     @PreAuthorize("hasAuthority('USER')")

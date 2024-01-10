@@ -1,6 +1,8 @@
 package com.microLib.library.controller
 
+import com.microLib.library.domain.model.UserWishList
 import com.microLib.library.domain.request.CreateUserWishListRequest
+import com.microLib.library.domain.response.PostCommentResponse
 import com.microLib.library.domain.response.UserWishListResponse
 import com.microLib.library.domain.view.UserWishListView
 import com.microLib.library.service.UserWishListService
@@ -35,6 +37,13 @@ class UserWishlistController(private val userWishListService: UserWishListServic
     @GetMapping("/{bookId}")
     fun getAllUsersByBookId(@PathVariable bookId:String):ResponseEntity<List<UserWishListView>>{
         return ResponseEntity(userWishListService.getAllByBookId(bookId),HttpStatus.OK)
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/popular")
+    fun getAllBooksByOwnerShip():List<String>{
+        return  userWishListService.getAllBooksByOwnerShip()
+
     }
 
 

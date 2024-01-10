@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/posts")
-@CrossOrigin("*")
 class PostController(private val postService: PostService){
 
     @PreAuthorize("hasAuthority('USER')")

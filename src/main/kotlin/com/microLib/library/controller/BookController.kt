@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/books")
-@CrossOrigin("*")
 class BookController(
     private val bookListService: BookListService,
     private val bookSaveService: BookSaveService,
@@ -29,43 +28,36 @@ class BookController(
         logger.info("BookController.saveBook() called with: createBookRequest = [$createBookRequest]")
         return ResponseEntity.status(HttpStatus.CREATED).body(bookSaveService.saveBook(createBookRequest))
     }
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     fun getBookList(): ResponseEntity<List<BookResponse>> {
         return ResponseEntity(bookListService.listBook(), HttpStatus.OK)
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/book/isbn/{isbn}")
     fun getBookByIsbn(@PathVariable isbn: String): ResponseEntity<BookResponse> {
         return ResponseEntity(bookListService.findByIsbn(isbn), HttpStatus.OK)
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/book/category/{categoryId}")
     fun getBooksByCategoryId(@PathVariable categoryId: String): ResponseEntity<List<BookResponse>> {
         return ResponseEntity(bookListService.getBooksByCategoryId(categoryId), HttpStatus.OK)
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/book/id/{id}")
     fun getBookById(@PathVariable id: String): ResponseEntity<BookResponse> {
         return ResponseEntity(BookResponse.convert(bookListService.findById(id)), HttpStatus.OK)
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/update")
     fun updateBook(@RequestBody updateBookRequest: UpdateBookRequest): ResponseEntity<BookResponse> {
         return ResponseEntity(bookUpdateService.updateBook(updateBookRequest), HttpStatus.OK)
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/search")
     fun search(@RequestParam search: String?): ResponseEntity<List<BookResponse>> {
         return ResponseEntity(bookListService.search(search), HttpStatus.OK)
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/search2")
     fun searchBook(@RequestParam search:String):ResponseEntity<List<BookResponse>>{
         return ResponseEntity(bookListService.searchBook(search),HttpStatus.OK)

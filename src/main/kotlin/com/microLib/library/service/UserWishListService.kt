@@ -39,6 +39,10 @@ class UserWishListService(
         return userWishListViewRepository.getAllBooksByUsername(user)?:throw UserNotFoundException("User not found with username $username")
     }
 
+    fun getAllBooksByOwnerShip():List<String>{
+         return userWishListRepository.getAllBooksOrderByOwnerShipDesc()
+    }
+
     fun delete(bookId:String){
         val user=SecurityContextHolder.getContext().authentication.name
         val userWishList=userWishListRepository.findByBookIdAndUsername(bookId,user)?:throw BookNotFoundException("Book not found with id $bookId")

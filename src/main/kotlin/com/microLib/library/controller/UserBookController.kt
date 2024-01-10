@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/user/books")
-@CrossOrigin("*")
 class UserBookController(private val userBookService: UserBookService){
 
     @PreAuthorize("hasAuthority('USER')")
@@ -39,6 +38,12 @@ class UserBookController(private val userBookService: UserBookService){
         @GetMapping("/users/{bookId}")
     fun getAllUsersByBookId(@PathVariable bookId:String):ResponseEntity<List<UserBookView>>{
         return ResponseEntity(userBookService.getAllUsersByBookId(bookId),HttpStatus.OK)
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/popular")
+    fun getAllBooksByOwnerShip():List<String>{
+        return userBookService.getAllBooksByOwnerShip()
     }
 
     @PreAuthorize("hasAuthority('USER')")

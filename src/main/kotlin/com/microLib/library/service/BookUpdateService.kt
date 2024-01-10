@@ -22,6 +22,12 @@ class BookUpdateService(
         return BookResponse.convert(bookRepository.save(book))
     }
 
+    fun updateBookRating(bookId: String, rating: Double): BookResponse {
+        val book = bookRepository.findBookById(bookId) ?: throw BookNotFoundException("Book not found with $bookId")
+
+        return BookResponse.convert(bookRepository.save(book))
+    }
+
     private fun updateAttributes(updateRequest: UpdateBookRequest, book: Book) {
         with(updateRequest) {
             book.title = title ?: book.title
@@ -31,4 +37,6 @@ class BookUpdateService(
             book.totalPageNumber = totalPageNumber ?: book.totalPageNumber
         }
     }
+
+
 }

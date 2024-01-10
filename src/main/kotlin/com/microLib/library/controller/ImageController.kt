@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/api/v1/image")
-@CrossOrigin("*")
 class ImageController(private val imageService: ImageService) {
 
     @PreAuthorize("hasAuthority('USER')")

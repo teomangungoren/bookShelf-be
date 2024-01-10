@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/users")
-@CrossOrigin("*")
 class UserController(private val userService: UserService) : General(){
 
     @PostMapping("/register")
